@@ -24,7 +24,7 @@ class resize_images(ConanFile):
 		self.requires("libjpeg/9d")
 		self.requires("boost/1.71.0@conan/stable")
 		
-	def install(self):		
+	def configure(self):		
 		self.options["boost"].without_atomic = True
 		self.options["boost"].without_chrono = True
 		self.options["boost"].without_container = True
@@ -50,7 +50,7 @@ class resize_images(ConanFile):
 		self.options["boost"].without_stacktrace = True
 		self.options["boost"].without_system = False 
 		self.options["boost"].without_test = True
-		self.options["boost"].without_thread = True
+		self.options["boost"].without_thread = False
 		self.options["boost"].without_timer = True
 		self.options["boost"].without_type_erasure = True
 		self.options["boost"].without_wave = True
