@@ -7,6 +7,11 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -m64")
+
+if (APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+endif()
+
 #set(CMAKE_EXE_LINKER_FLAGS "-static -static-libstdc++")
 
 set(SOURCE_FILES src/main.cpp)
