@@ -5,9 +5,8 @@ import os
 class resize_images(ConanFile):
 	name = "resize_images"
 	version = "0.1b"
-	settings = "os", "compiler", "build_type", "arch"
-	generators = "cmake"
-	#default_options = {"*:shared" = False}
+	settings = "cppstd", "os", "compiler", "build_type", "arch"
+	generators = "cmake", "xcode", "gcc"
 	no_copy_source = True
 	build_policy = "missing"
 	
@@ -68,8 +67,10 @@ class resize_images(ConanFile):
 
 	def configure_cmake(self):
 		cmake = CMake(self)
-		cmake.definitions["CMAKE_EXE_LINKER_FLAGS"] = "-static -static-libstdc++"
-		cmake.definitions["CMAKE_CXX_FLAGS"] = "-O2 -m64"
+
+		if self.settings.os == "Windows":
+			cmake.definitions["CONAN_SHARED_LINKER_FLAGS"] = "-static -static-libstdc++"
+		
 		cmake.configure()
 		return cmake
 
