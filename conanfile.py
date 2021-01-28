@@ -11,28 +11,22 @@ class resize_images(ConanFile):
 	no_copy_source = True
 	build_policy = "missing"
 	
-	def build_requirements(self):
-		self.build_requires("cmake/3.19.3")
-		if self.settings.os == "Windows":
-			self.build_requires("mingw_installer/1.0@conan/stable")
-			self.build_requires("msys2/20200517")
-		
 	def requirements(self):
 		# installed by boost library 
 		self.requires("zlib/1.2.11")
 		self.requires("libpng/1.6.37")
 		self.requires("libjpeg/9d")
-		self.requires("boost/1.71.0@conan/stable")
+		self.requires("boost/1.75.0")
 		
-	def install(self):		
+	def configure(self):		
 		self.options["boost"].without_atomic = True
 		self.options["boost"].without_chrono = True
-		self.options["boost"].without_container = True
+		self.options["boost"].without_container = False
 		self.options["boost"].without_context = True
 		self.options["boost"].without_contract = True
 		self.options["boost"].without_coroutine = True
 		self.options["boost"].without_date_time = True
-		self.options["boost"].without_exception = True
+		self.options["boost"].without_exception = False
 		self.options["boost"].without_fiber = True
 		self.options["boost"].without_filesystem = False
 		self.options["boost"].without_graph = True
