@@ -47,7 +47,6 @@ using namespace cimg_library;
 #include <boost/filesystem/fstream.hpp>
 //#include <boost/timer/timer.hpp>
 using namespace boost::filesystem;
-#include <boost/thread.hpp>
 //namespace po = boost::program_options;
 
 
@@ -98,9 +97,6 @@ CImg<unsigned char> originalImage;
 CImg<unsigned char> resizedImage;
 CImg<unsigned char> textbackground;
 CImg<unsigned char> textbox;
-
-// Create a thread pool
-boost::thread_group threadpool;
 
 CImg<unsigned char> resizeKeepAspectRatio(CImg<unsigned char> srcImage, const float dstWidth, const float dstHeight) {
 	float scaleHeight;
