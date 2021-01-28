@@ -4,9 +4,9 @@ import os
 
 class resize_images(ConanFile):
 	name = "resize_images"
-	version = "0.1"
+	version = "0.1b"
 	settings = "os", "compiler", "build_type", "arch"
-	generators = "cmake", "gcc", "visual_studio"
+	generators = "cmake"
 	#default_options = {"*:shared" = False}
 	no_copy_source = True
 	build_policy = "missing"
@@ -66,8 +66,18 @@ class resize_images(ConanFile):
 		env_build.make()
 		env_build.make(args=["install"])
 
+	def configure_cmake(self):
+		cmake = CMake(self)
+		cmake.definitions["CMAKE_EXE_LINKER_FLAGS"] = "-static -static-libstdc++"
+		cmake.definitions["CMAKE_CXX_FLAGS"] = "-O2 -m64"
+		cmake.configure()
+		return cmake
 
 	def build(self):
-		cmake = CMake(self)
-		cmake.configure()
+		cmake = self.configure_cmake()
 		cmake.build()
+		# run unit tests after the build
+        #cmake.test()
+
+        # run custom make command
+        #self.run("make -j3 check)
