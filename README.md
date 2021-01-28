@@ -12,13 +12,19 @@ pacman -D mingw-w64-x86_64-cmake
 pip install conan
 ```
 
-Create conan profile: 
+Create or update conan profile: 
 
+```
 conan profile new default --force --detect  # Generates default profile detecting GCC and sets old ABI
 conan profile update settings.compiler.libcxx=libstdc++11 default  # Sets libcxx to C++11 ABI
+````
 
+Change to project folder and build
+
+```
 cd <path/to/source>
 mkdir build
 cd build
 conan install .. --build=missing
 conan build ..
+````

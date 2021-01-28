@@ -47,6 +47,7 @@ using namespace cimg_library;
 #include <boost/filesystem/fstream.hpp>
 //#include <boost/timer/timer.hpp>
 using namespace boost::filesystem;
+#include <boost/thread.hpp>
 //namespace po = boost::program_options;
 
 
@@ -88,12 +89,7 @@ string strOrderNumber;
 int width;
 // Define number of steps to be reported in progress
 int steps = 5;
-	
-// #ifdef BOOST_WINDOWS_API
-  // char originalFile[255] = "C:\\Users\\jankerm\\Documents\\dev\\code\\magictool\\3277027_440\\a.jpg";
-// #else
-  // char originalFile[255] = "/Users/marcojanker/Nextcloud/Softwareentwicklung/magictool/3277027_440/a.jpg";
-// #endif
+
 char resizedAppendix[] = "_resized";
 char destDir[] = "Originale";
 string orderNumberFile = "overlay.txt";
@@ -103,7 +99,10 @@ CImg<unsigned char> resizedImage;
 CImg<unsigned char> textbackground;
 CImg<unsigned char> textbox;
 
-void resizeKeepAspectRatio(CImg<unsigned char> srcImage, const float dstWidth, const float dstHeight) {
+// Create a thread pool
+boost::thread_group threadpool;
+
+CImg<unsigned char> resizeKeepAspectRatio(CImg<unsigned char> srcImage, const float dstWidth, const float dstHeight) {
 	float scaleHeight;
 	float scaleWidth;
 	try {
@@ -121,7 +120,7 @@ void resizeKeepAspectRatio(CImg<unsigned char> srcImage, const float dstWidth, c
 	 */
 	float scale = std::min(scaleHeight, scaleWidth);
 
-	resizedImage = srcImage.resize((int)(srcImage.width() * scale), (int)(srcImage.height() * scale),-100,-100,6);
+	return srcImage.resize((int)(srcImage.width() * scale), (int)(srcImage.height() * scale),-100,-100,6);
 }
 
 #ifdef BOOST_WINDOWS_API
@@ -206,6 +205,8 @@ string getOrderNumber(path filePath) {
 			std::getline(inFile,s); 
 			return s;
 		}
+
+		// Extract order and position number from complete path to file
 		static const boost::regex e("(\\d{7}_\\d{3})");
 		boost::smatch what;
 		if (boost::regex_search(filePath.generic_string(), what, e)) {
@@ -257,6 +258,7 @@ float getTextSize (const char * text, int initialSize, float coveredSize, float 
 }
 	
 int main(int argc, char * argv[]) {
+
 	std::cout <<  "Version: " << VERSION << std::endl;
 	if (argc < 2) {
 		std::cout << "missing filename" << std::endl;
@@ -281,6 +283,7 @@ int main(int argc, char * argv[]) {
 		char* originalFile = *argv;
 		std::string strOriginalFile(originalFile);
 		
+		// skip argument if it is not an image
 		if ( ! isValidImage(strOriginalFile) ) { cout << "Not an image!" << endl; continue; }
 					
 		// Create path objects
@@ -288,7 +291,8 @@ int main(int argc, char * argv[]) {
 		path pathDestDirectory = pathOriginalFile.parent_path() / destDir;
 		path pathDestFile = pathOriginalFile.parent_path() / destDir / pathOriginalFile.filename();
 		path pathResizedFile = pathOriginalFile.parent_path() / (path(pathOriginalFile.stem().string() + resizedAppendix ).string() + pathOriginalFile.extension().string());
-			
+		
+		// read order number once
 		if ( strOrderNumber.length() == 0 ) {
 			strOrderNumber = getOrderNumber( pathOriginalFile.parent_path() );
 			orderNumber = strOrderNumber.c_str();
@@ -314,12 +318,11 @@ int main(int argc, char * argv[]) {
 						++progressBar;
 						progressBar.display();
 						// resize original image
-						resizeKeepAspectRatio(originalImage,newimage_width,newimage_height);
+						resizedImage = resizeKeepAspectRatio(originalImage,newimage_width,newimage_height);
 
 						// get size of resized image
 						resizedImageSize = resizedImage.width() * resizedImage.height();
 						// cout << "Calculating optimum text size." << endl;
-						// boost::timer::auto_cpu_timer t;
 						
 						try {
 							// Create textbox
