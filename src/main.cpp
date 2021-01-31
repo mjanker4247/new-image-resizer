@@ -38,6 +38,7 @@ using namespace cimg_library;
 #include <vector>
 #include <array>
 #include <thread>
+#include <future>
 #include <chrono>
 #include <algorithm> 
 
@@ -314,7 +315,13 @@ int main(int argc, char * argv[]) {
 						++progressBar;
 						progressBar.display();
 						// resize original image
-						resizedImage = resizeKeepAspectRatio(originalImage,newimage_width,newimage_height);
+						std::future< CImg<unsigned char> > resultFromResize = std::async(std::launch::async, resizeKeepAspectRatio, originalImage,newimage_width,newimage_height);
+
+						try {
+							resizedImage = resultFromResize.get();
+						} catch (const char* msg) {
+							cerr << msg << endl;
+						}
 
 						// get size of resized image
 						resizedImageSize = resizedImage.width() * resizedImage.height();
@@ -357,25 +364,31 @@ int main(int argc, char * argv[]) {
 						}
 						
 						// move original image to destination folder
-						try {
-							// Create directory
-							if ( ! exists(pathDestDirectory)) {
+						// Create directory
+						if ( ! exists(pathDestDirectory)) {
+							try {
 								boost::filesystem::create_directory(pathDestDirectory);
 							}
-							// Step 4
-							// Move original image
-							++progressBar;
-							progressBar.display();
-							//cout << "Moving original imgage to " << pathDestFile.parent_path() << endl;
-							boost::filesystem::rename(pathOriginalFile,pathDestFile);
+							catch (const filesystem_error& ex)
+							{
+								std::fprintf(stderr,"Filesystem Error: %s",ex.what());
+								system("pause");
+							}
+						}
 
+						// Step 4
+						// Move original image
+						++progressBar;
+						progressBar.display();
+						//cout << "Moving original imgage to " << pathDestFile.parent_path() << endl;
+						try {
+							boost::filesystem::rename(pathOriginalFile,pathDestFile);
 						}
 						catch (const filesystem_error& ex)
 						{
 							std::fprintf(stderr,"Filesystem Error: %s",ex.what());
 							system("pause");
 						}
-
 					}
 				} catch (CImgException) {
 					std::cout << "Image " << pathOriginalFile << " not recognized" << std::endl;
