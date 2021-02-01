@@ -5,7 +5,7 @@ import os
 class resize_images(ConanFile):
 	name = "resize_images"
 	version = "0.1b"
-	settings = "cppstd", "os", "compiler", "build_type", "arch"
+	settings = "os", "compiler", "build_type", "arch"
 	generators = "cmake", "xcode", "gcc"
 	no_copy_source = True
 	build_policy = "missing"

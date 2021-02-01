@@ -1,0 +1,7 @@
+digraph {
+        "conanfile.py (resize_images/0.1b)" -> "zlib/1.2.11"
+        "conanfile.py (resize_images/0.1b)" -> "libpng/1.6.37"
+        "conanfile.py (resize_images/0.1b)" -> "libjpeg/9d"
+        "conanfile.py (resize_images/0.1b)" -> "boost/1.75.0"
+        "libpng/1.6.37" -> "zlib/1.2.11"
+}
