@@ -182,9 +182,15 @@ std::vector<fs::path> getFolderContent(std::string path) {
 	}
 	return result_set;
 }
+
+void printVersion()
+{
+	std::cout <<  "Version: " << VERSION << std::endl;
+}
 int main(int argc, char * argv[]) {
 
-	std::cout <<  "Version: " << VERSION << std::endl;
+	printVersion();
+	
 	if (argc < 2) {
 		std::cout << "missing filename" << std::endl;
 		exit(1);
