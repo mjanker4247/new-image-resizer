@@ -9,7 +9,7 @@ class resize_images(ConanFile):
 	generators = "cmake", "xcode", "gcc"
 	no_copy_source = True
 	build_policy = "missing"
-	
+            
 	def requirements(self):
 		# installed by boost library 
 		self.requires("zlib/1.2.11")

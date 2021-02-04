@@ -1,0 +1,52 @@
+{
+ "graph_lock": {
+  "nodes": {
+   "0": {
+    "ref": "resize_images/0.1b",
+    "options": "boost:asio_no_deprecated=False\nboost:bzip2=True\nboost:debug_level=0\nboost:diagnostic_definitions=False\nboost:error_code_header_only=False\nboost:extra_b2_flags=None\nboost:fPIC=True\nboost:filesystem_no_deprecated=False\nboost:header_only=False\nboost:i18n_backend=None\nboost:layout=system\nboost:lzma=False\nboost:magic_autolink=False\nboost:multithreading=True\nboost:namespace=boost\nboost:namespace_alias=False\nboost:pch=True\nboost:python_executable=None\nboost:python_version=None\nboost:segmented_stacks=False\nboost:shared=False\nboost:system_no_deprecated=False\nboost:without_atomic=True\nboost:without_chrono=True\nboost:without_container=False\nboost:without_context=True\nboost:without_contract=True\nboost:without_coroutine=True\nboost:without_date_time=True\nboost:without_exception=False\nboost:without_fiber=True\nboost:without_filesystem=False\nboost:without_graph=True\nboost:without_graph_parallel=True\nboost:without_iostreams=True\nboost:without_json=False\nboost:without_locale=True\nboost:without_log=True\nboost:without_math=True\nboost:without_mpi=True\nboost:without_nowide=False\nboost:without_program_options=False\nboost:without_python=True\nboost:without_random=True\nboost:without_regex=False\nboost:without_serialization=True\nboost:without_stacktrace=True\nboost:without_system=False\nboost:without_test=True\nboost:without_thread=True\nboost:without_timer=True\nboost:without_type_erasure=True\nboost:without_wave=True\nboost:zlib=True\nboost:zstd=False\nlibjpeg:fPIC=True\nlibjpeg:shared=False\nlibpng:api_prefix=None\nlibpng:fPIC=True\nlibpng:shared=False\nzlib:fPIC=True\nzlib:minizip=False\nzlib:shared=False",
+    "requires": [
+     "1",
+     "2",
+     "3",
+     "4"
+    ],
+    "path": "conanfile.py",
+    "context": "host"
+   },
+   "1": {
+    "ref": "zlib/1.2.11",
+    "options": "fPIC=True\nminizip=False\nshared=False",
+    "package_id": "8fafab5ebfba468fd21a497cfee65cafe294bd9e",
+    "prev": "0",
+    "context": "host"
+   },
+   "2": {
+    "ref": "libpng/1.6.37",
+    "options": "api_prefix=None\nfPIC=True\nshared=False\nzlib:fPIC=True\nzlib:minizip=False\nzlib:shared=False",
+    "package_id": "68a3718d811c794b987fc5cf55a2682bd569538b",
+    "prev": "0",
+    "requires": [
+     "1"
+    ],
+    "context": "host"
+   },
+   "3": {
+    "ref": "libjpeg/9d",
+    "options": "fPIC=True\nshared=False",
+    "package_id": "8fafab5ebfba468fd21a497cfee65cafe294bd9e",
+    "prev": "0",
+    "context": "host"
+   },
+   "4": {
+    "ref": "boost/1.75.0",
+    "options": "asio_no_deprecated=False\nbzip2=True\ndebug_level=0\ndiagnostic_definitions=False\nerror_code_header_only=False\nextra_b2_flags=None\nfPIC=True\nfilesystem_no_deprecated=False\nheader_only=False\ni18n_backend=None\nlayout=system\nlzma=False\nmagic_autolink=False\nmultithreading=True\nnamespace=boost\nnamespace_alias=False\npch=True\npython_executable=None\npython_version=None\nsegmented_stacks=False\nshared=False\nsystem_no_deprecated=False\nwithout_atomic=True\nwithout_chrono=True\nwithout_container=False\nwithout_context=True\nwithout_contract=True\nwithout_coroutine=True\nwithout_date_time=True\nwithout_exception=False\nwithout_fiber=True\nwithout_filesystem=False\nwithout_graph=True\nwithout_graph_parallel=True\nwithout_iostreams=True\nwithout_json=False\nwithout_locale=True\nwithout_log=True\nwithout_math=True\nwithout_mpi=True\nwithout_nowide=False\nwithout_program_options=False\nwithout_python=True\nwithout_random=True\nwithout_regex=False\nwithout_serialization=True\nwithout_stacktrace=True\nwithout_system=False\nwithout_test=True\nwithout_thread=True\nwithout_timer=True\nwithout_type_erasure=True\nwithout_wave=True\nzlib=True\nzstd=False",
+    "package_id": "2d21b9ca90fe89091ec949c4ba84a81972d0c77f",
+    "prev": "0",
+    "context": "host"
+   }
+  },
+  "revisions_enabled": false
+ },
+ "version": "0.4",
+ "profile_host": "[settings]\narch=armv8\narch_build=armv8\nbuild_type=Release\ncompiler=apple-clang\ncompiler.cppstd=gnu17\ncompiler.libcxx=libc++\ncompiler.version=12.0\nos=Macos\nos_build=Macos\n[options]\n[build_requires]\n[env]\n"
+}
