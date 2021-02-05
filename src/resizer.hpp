@@ -24,8 +24,6 @@ using namespace cimg_library;
 #include <cstring>
 #include <cstdio>
 #include <cstdint>
-#include <iostream>
-#include <fstream>
 #include <cstdint>
 #include <vector>
 #include <array>
@@ -34,12 +32,10 @@ using namespace cimg_library;
 #include <chrono>
 #include <algorithm> 
 #include <regex>
-
-// Boost
-#include <boost/range/iterator_range.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-namespace fs = boost::filesystem;
+#include <iostream>
+#include <fstream>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 
 #include "ProgressBar.hpp"
