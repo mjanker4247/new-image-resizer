@@ -1,32 +1,7 @@
 patches/
 
-# Created by https://www.toptal.com/developers/gitignore/api/conan,cmake,xcode,visualstudio,visualstudiocode,windows,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=conan,cmake,xcode,visualstudio,visualstudiocode,windows,macos
-
-### CMake ###
-CMakeLists.txt.user
-CMakeCache.txt
-CMakeFiles
-CMakeScripts
-Testing
-Makefile
-cmake_install.cmake
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake
-_deps
-CMakeUserPresets.json
-
-### CMake Patch ###
-# External projects
-*-prefix/
-
-### Conan ###
-# Conan build information
-conan.lock
-conanbuildinfo.*
-conaninfo.txt
-graph_info.json
+# Created by https://www.toptal.com/developers/gitignore/api/xcode,conan,visualstudio,visualstudiocode,cmake
+# Edit at https://www.toptal.com/developers/gitignore?templates=xcode,conan,visualstudio,visualstudiocode,cmake
 
 ### macOS ###
 # General
@@ -57,17 +32,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-### VisualStudioCode ###
-.vscode/*
-!.vscode/tasks.json
-!.vscode/launch.json
-*.code-workspace
-
-### VisualStudioCode Patch ###
-# Ignore all local history of files
-.history
-.ionide
-
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
@@ -93,6 +57,42 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+### CMake ###
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+CMakeUserPresets.json
+
+### CMake Patch ###
+# External projects
+*-prefix/
+
+### Conan ###
+# Conan build information
+conan.lock
+conanbuildinfo.*
+conaninfo.txt
+graph_info.json
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+*.code-workspace
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
 
 ### Xcode ###
 # Xcode
@@ -128,6 +128,8 @@ DerivedData/
 !*.xcodeproj/xcshareddata/
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
+*.pbxproj
+*.xcscheme
 
 ### VisualStudio ###
 ## Ignore Visual Studio temporary files, build results, and
@@ -484,4 +486,5 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-# End of https://www.toptal.com/developers/gitignore/api/conan,cmake,xcode,visualstudio,visualstudiocode,windows,macos
+# End of https://www.toptal.com/developers/gitignore/api/xcode,conan,visualstudio,visualstudiocode,cmake
+
