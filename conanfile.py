@@ -6,7 +6,7 @@ class resize_images(ConanFile):
 	name = "resize_images"
 	version = "0.1b"
 	settings = "os", "compiler", "build_type", "arch"
-	generators = "cmake", "xcode", "gcc"
+	generators = "cmake", "xcode"
 	no_copy_source = True
 	build_policy = "missing"
             
