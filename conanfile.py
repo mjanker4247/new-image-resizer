@@ -38,7 +38,7 @@ class resize_images(ConanFile):
 		self.options["boost"].without_program_options = False
 		self.options["boost"].without_python = True
 		self.options["boost"].without_random = True
-		self.options["boost"].without_regex = False
+		self.options["boost"].without_regex = True
 		self.options["boost"].without_serialization = True
 		self.options["boost"].without_stacktrace = True
 		self.options["boost"].without_system = False 

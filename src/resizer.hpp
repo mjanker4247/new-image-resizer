@@ -33,15 +33,13 @@ using namespace cimg_library;
 #include <future>
 #include <chrono>
 #include <algorithm> 
+#include <regex>
 
 // Boost
-#include <boost/regex.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
-//#include <boost/timer/timer.hpp>
 namespace fs = boost::filesystem;
-//namespace po = boost::program_options;
 
 
 #include "ProgressBar.hpp"

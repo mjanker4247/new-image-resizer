@@ -113,9 +113,9 @@ string getOrderNumber(fs::path filePath) {
 		}
 
 		// Extract order and position number from complete path to file
-		static const boost::regex e("(\\d{7}_\\d{3})");
-		boost::smatch what;
-		if (boost::regex_search(filePath.generic_string(), what, e)) {
+		static const std::regex e("(\\d{7}_\\d{3})");
+		std::smatch what;
+		if (std::regex_search(filePath.generic_string(), what, e)) {
 			return what[1];
 		}
 	} catch (const char* msg) {
@@ -187,6 +187,7 @@ void printVersion()
 {
 	std::cout <<  "Version: " << VERSION << std::endl;
 }
+
 int main(int argc, char * argv[]) {
 
 	printVersion();
