@@ -30,7 +30,6 @@
 		1DA623A125CC879D009A32CC /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		1DA623A625CC886A009A32CC /* conanbuildinfo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = conanbuildinfo.xcconfig; sourceTree = "<group>"; };
 		1DA623A925CC8C36009A32CC /* conanfile.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = conanfile.py; sourceTree = "<group>"; };
-		1DA623B425CC913C009A32CC /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,7 +49,6 @@
 				1DA623A925CC8C36009A32CC /* conanfile.py */,
 				1DA623A625CC886A009A32CC /* conanbuildinfo.xcconfig */,
 				1DA6239D25CC879D009A32CC /* src */,
-				1DA623B325CC913B009A32CC /* image-resizer */,
 				1DA6239025CC8762009A32CC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -73,14 +71,6 @@
 				1DA623A125CC879D009A32CC /* main.cpp */,
 			);
 			path = src;
-			sourceTree = "<group>";
-		};
-		1DA623B325CC913B009A32CC /* image-resizer */ = {
-			isa = PBXGroup;
-			children = (
-				1DA623B425CC913C009A32CC /* main.cpp */,
-			);
-			path = "image-resizer";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
