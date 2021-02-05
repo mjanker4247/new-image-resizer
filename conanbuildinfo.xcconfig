@@ -1,9 +1,0 @@
-
-HEADER_SEARCH_PATHS = $(inherited) "/Users/marcojanker/.conan/data/libpng/1.6.37/_/_/package/68a3718d811c794b987fc5cf55a2682bd569538b/include" "/Users/marcojanker/.conan/data/libjpeg/9d/_/_/package/8fafab5ebfba468fd21a497cfee65cafe294bd9e/include" "/Users/marcojanker/.conan/data/boost/1.75.0/_/_/package/2d21b9ca90fe89091ec949c4ba84a81972d0c77f/include" "/Users/marcojanker/.conan/data/zlib/1.2.11/_/_/package/8fafab5ebfba468fd21a497cfee65cafe294bd9e/include"
-LIBRARY_SEARCH_PATHS = $(inherited) "/Users/marcojanker/.conan/data/libpng/1.6.37/_/_/package/68a3718d811c794b987fc5cf55a2682bd569538b/lib" "/Users/marcojanker/.conan/data/libjpeg/9d/_/_/package/8fafab5ebfba468fd21a497cfee65cafe294bd9e/lib" "/Users/marcojanker/.conan/data/boost/1.75.0/_/_/package/2d21b9ca90fe89091ec949c4ba84a81972d0c77f/lib" "/Users/marcojanker/.conan/data/zlib/1.2.11/_/_/package/8fafab5ebfba468fd21a497cfee65cafe294bd9e/lib"
-OTHER_LDFLAGS = $(inherited)  -lpng16 -ljpeg -lboost_json -lboost_container -lboost_exception -lboost_nowide -lboost_filesystem -lboost_program_options -lboost_regex -lboost_system -lz  
-
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) "LIBJPEG_STATIC"
-OTHER_CFLAGS = $(inherited) 
-OTHER_CPLUSPLUSFLAGS = $(inherited) 
-FRAMEWORK_SEARCH_PATHS = $(inherited) "/Users/marcojanker/.conan/data/libpng/1.6.37/_/_/package/68a3718d811c794b987fc5cf55a2682bd569538b" "/Users/marcojanker/.conan/data/libjpeg/9d/_/_/package/8fafab5ebfba468fd21a497cfee65cafe294bd9e" "/Users/marcojanker/.conan/data/boost/1.75.0/_/_/package/2d21b9ca90fe89091ec949c4ba84a81972d0c77f" "/Users/marcojanker/.conan/data/zlib/1.2.11/_/_/package/8fafab5ebfba468fd21a497cfee65cafe294bd9e" 
