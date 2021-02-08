@@ -8,6 +8,22 @@
 
 #include "resizer.hpp"
 
+std::vector<char *> getFilesFromPath(char* path)
+{
+    DIR *dir; struct dirent *diread;
+    vector<char *> files;
+
+    if ((dir = opendir(path)) != nullptr) {
+        while ((diread = readdir(dir)) != nullptr) {
+            files.push_back(diread->d_name);
+        }
+        closedir (dir);
+    } else {
+        perror ("opendir");
+    }
+    return files;
+}
+
 CImg<unsigned char> resizeKeepAspectRatio(CImg<unsigned char> srcImage, const float dstWidth, const float dstHeight) {
 	float scaleHeight;
 	float scaleWidth;

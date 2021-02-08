@@ -38,6 +38,7 @@ using namespace cimg_library;
 namespace fs = std::filesystem;
 
 
+#include <dirent.h>
 #include "ProgressBar.hpp"
 using namespace std;
 
@@ -87,3 +88,5 @@ CImg<unsigned char> originalImage;
 CImg<unsigned char> resizedImage;
 CImg<unsigned char> textbackground;
 CImg<unsigned char> textbox;
+
+std::vector<char *> getFilesFromPath(char* path);
