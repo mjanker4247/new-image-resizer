@@ -35,11 +35,11 @@ using namespace cimg_library;
 #include <iostream>
 #include <fstream>
 #include <filesystem>
-namespace fs = std::filesystem;
-
-
+#include <regex>
 #include <dirent.h>
+
 #include "ProgressBar.hpp"
+
 using namespace std;
 
 
@@ -79,6 +79,7 @@ int width;
 int steps = 5;
 bool isFolder = false;
 bool isFile = false;
+std::vector<char *> files;
 
 char resizedAppendix[] = "_resized";
 char destDir[] = "Originale";
@@ -90,3 +91,4 @@ CImg<unsigned char> textbackground;
 CImg<unsigned char> textbox;
 
 std::vector<char *> getFilesFromPath(char* path);
+vector<string> readLinesFromFile(string file);
