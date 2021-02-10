@@ -15,6 +15,7 @@ class resize_images(ConanFile):
 		self.requires("zlib/1.2.11")
 		self.requires("libpng/1.6.37")
 		self.requires("libjpeg/9d")
+		self.requires("argparse/2.1")
 
 	def package(self):
 		self.copy("*.h")
@@ -25,7 +26,6 @@ class resize_images(ConanFile):
 			tools.run_in_windows_bash(self, tools.unix_path(command))
 		else:
 			self.run(command)
-			
 
 	def _build_autotools(self, configure_args=None):
 		env_build = AutoToolsBuildEnvironment(self, win_bash=tools.os_info.is_windows)
