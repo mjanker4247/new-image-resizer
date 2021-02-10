@@ -97,6 +97,6 @@ string readOrderNumberFromFile(std::filesystem::path filePath);
 int high_low(int high,int low);
 float getTextSize (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance);
 void printVersion();
-std::vector<char *> getFilesFromPath(char* path);
+std::vector<char *> getFilesFromDirectory(char* path);
 std::vector<char *> getAllPictures(std::vector<char *>);
 vector<string> readLinesFromFile(string file);

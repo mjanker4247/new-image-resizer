@@ -22,7 +22,7 @@ void showMessage(const string& s) {
 }
 #endif
 
-std::vector<char *> getFilesFromPath(char* path)
+std::vector<char *> getFilesFromDirectory(char* path)
 {
     DIR *dir; struct dirent *diread;
     vector<char *> files;
@@ -259,7 +259,7 @@ int main(int argc, char * argv[]) {
 		exit(1);
     } else if (argc == 2) {
         // populate vector with content of folder
-        files = getAllPictures( getFilesFromPath( argv[1] ) );
+        files = getAllPictures( getFilesFromDirectory( argv[1] ) );
     } else {
         // populate vector with arguments
         // Iterate over arguments
@@ -301,103 +301,94 @@ int main(int argc, char * argv[]) {
 		++progressBar;
 		progressBar.display();
 		
-		if ((exists(pathOriginalFile)) ) {
-			if (is_regular_file(pathOriginalFile)) {
+		try {
+			
+			originalImage.load(strOriginalFile);
+
+			if (originalImage) {
+				// Step 2
+				++progressBar;
+				progressBar.display();
+				// resize original image
+				std::future< CImg<unsigned char> > resultFromResize = std::async(std::launch::async, resizeKeepAspectRatio, originalImage,newimage_width,newimage_height);
+
 				try {
-					
-					originalImage.load(strOriginalFile);
-
-					if (originalImage) {
-						// Step 2
-						++progressBar;
-						progressBar.display();
-						// resize original image
-						std::future< CImg<unsigned char> > resultFromResize = std::async(std::launch::async, resizeKeepAspectRatio, originalImage,newimage_width,newimage_height);
-
-						try {
-							resizedImage = resultFromResize.get();
-						} catch (const char* msg) {
-							cerr << msg << endl;
-						}
-
-						// get size of resized image
-						resizedImageSize = resizedImage.width() * resizedImage.height();
-                        
-						// Calculating optimum text size.
-						try {
-							// Create textbox
-							if ( textSize == 0 ) {
-								// use a reasonable initial size value
-								textSize = getTextSize(orderNumber, sqrt(resizedImageSize / 100 * coveragePercent) , static_cast<float>(resizedImageSize), coveragePercent, tolerance);
-								textbox.draw_text(0, 0, orderNumber, white, black, 1, textSize);
-								// create background image with size of textbox
-								textbackground.assign(textbox.width() ,textbox.height() ,1,3,0);
-								// fill it black
-								textbackground.fill(backgroundColor);
-								// draw text on background
-								textbackground.draw_text(0,0,orderNumber,green,black,1,textSize);
-							}
-						} catch (const char* msg) {
-							cerr << msg << endl;
-						}
-						// t.report();
-						
-						try {
-							// draw text box in left top corner
-							resizedImage.draw_image(posX,posY,textbackground);
-						} catch (const char* msg) {
-							cerr << msg << endl;
-						}
-
-						// Step 3
-						++progressBar;
-						progressBar.display();
-						// save modified image
-						//cout << "Saving resized image: " << filename << endl;
-						try {
-							resizedImage.save_jpeg( pathResizedFile.generic_string().c_str(), 90);
-						} catch (const char* msg) {
-							cerr << msg << endl;
-						}
-						
-						// move original image to destination folder
-						// Create directory
-						if ( ! exists(pathDestDirectory)) {
-							try {
-                                std::filesystem::create_directory(pathDestDirectory);
-							}
-							catch (const std::filesystem::filesystem_error& ex)
-							{
-								std::fprintf(stderr,"Filesystem Error: %s",ex.what());
-								system("pause");
-							}
-						}
-
-						// Step 4
-						// Move original image
-						++progressBar;
-						progressBar.display();
-						//cout << "Moving original imgage to " << pathDestFile.parent_path() << endl;
-						try {
-                            std::filesystem::rename(pathOriginalFile,pathDestFile);
-						}
-						catch (const std::filesystem::filesystem_error& ex)
-						{
-							std::fprintf(stderr,"Filesystem Error: %s",ex.what());
-							system("pause");
-						}
-					}
-				} catch (CImgException) {
-					std::cout << "Image " << pathOriginalFile << " not recognized" << std::endl;
-					system("pause");
-					originalImage.assign();
+					resizedImage = resultFromResize.get();
+				} catch (const char* msg) {
+					cerr << msg << endl;
 				}
 
-			} else if (is_directory(pathOriginalFile)) {
-				// is path p a directory?
-				cout << pathOriginalFile << " is a directory.\n";
-				system("pause");
+				// get size of resized image
+				resizedImageSize = resizedImage.width() * resizedImage.height();
+				
+				// Calculating optimum text size.
+				try {
+					// Create textbox
+					if ( textSize == 0 ) {
+						// use a reasonable initial size value
+						textSize = getTextSize(orderNumber, sqrt(resizedImageSize / 100 * coveragePercent) , static_cast<float>(resizedImageSize), coveragePercent, tolerance);
+						textbox.draw_text(0, 0, orderNumber, white, black, 1, textSize);
+						// create background image with size of textbox
+						textbackground.assign(textbox.width() ,textbox.height() ,1,3,0);
+						// fill it black
+						textbackground.fill(backgroundColor);
+						// draw text on background
+						textbackground.draw_text(0,0,orderNumber,green,black,1,textSize);
+					}
+				} catch (const char* msg) {
+					cerr << msg << endl;
+				}
+				// t.report();
+				
+				try {
+					// draw text box in left top corner
+					resizedImage.draw_image(posX,posY,textbackground);
+				} catch (const char* msg) {
+					cerr << msg << endl;
+				}
+
+				// Step 3
+				++progressBar;
+				progressBar.display();
+				// save modified image
+				//cout << "Saving resized image: " << filename << endl;
+				try {
+					resizedImage.save_jpeg( pathResizedFile.generic_string().c_str(), 90);
+				} catch (const char* msg) {
+					cerr << msg << endl;
+				}
+				
+				// move original image to destination folder
+				// Create directory
+				if ( ! exists(pathDestDirectory)) {
+					try {
+						std::filesystem::create_directory(pathDestDirectory);
+					}
+					catch (const std::filesystem::filesystem_error& ex)
+					{
+						std::fprintf(stderr,"Filesystem Error: %s",ex.what());
+						system("pause");
+					}
+				}
+
+				// Step 4
+				// Move original image
+				++progressBar;
+				progressBar.display();
+				//cout << "Moving original imgage to " << pathDestFile.parent_path() << endl;
+				try {
+					std::filesystem::rename(pathOriginalFile,pathDestFile);
+				}
+				catch (const std::filesystem::filesystem_error& ex)
+				{
+					std::fprintf(stderr,"Filesystem Error: %s",ex.what());
+					system("pause");
+				}
 			}
+		} catch (CImgException) {
+			std::cout << "Image " << pathOriginalFile << " not recognized" << std::endl;
+			system("pause");
+			originalImage.assign();
 		}
 		
 		// Step 5
