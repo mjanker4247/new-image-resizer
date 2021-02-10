@@ -273,15 +273,13 @@ int main(int argc, char * argv[]) {
 	unsigned int total = steps * (argc - 1);
 	ProgressBar progressBar(total, width, '#', '-');
 
-	// Iterate over arguments
-	for (++argv; *argv; ++argv) {
-		
-		char* originalFile = *argv;
-		string strOriginalFile(originalFile);
+	// Iterate over files
+	for (auto const& strOriginalFile: files )
+	{
 					
 		// Create path objects
 		// path to original file
-        std::filesystem::path pathOriginalFile(originalFile);
+        std::filesystem::path pathOriginalFile(strOriginalFile);
 		// path object to backup copy of original image file
         std::filesystem::path pathDestDirectory = pathOriginalFile.parent_path() / destDir;
         std::filesystem::path pathDestFile = pathOriginalFile.parent_path() / destDir / pathOriginalFile.filename();
@@ -307,7 +305,7 @@ int main(int argc, char * argv[]) {
 			if (is_regular_file(pathOriginalFile)) {
 				try {
 					
-					originalImage.load(originalFile);
+					originalImage.load(strOriginalFile);
 
 					if (originalImage) {
 						// Step 2
