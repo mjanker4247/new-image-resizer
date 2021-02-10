@@ -38,6 +38,21 @@ std::vector<char *> getFilesFromPath(char* path)
     return files;
 }
 
+std::vector<char *> getAllPictures(std::vector<char *> files)
+{
+    vector<char *> pictures;
+
+    for (auto file : files)
+    {
+        if (isValidImage(file))
+        {
+            pictures.push_back(file);
+        }
+            
+    }
+    return pictures;
+}
+
 vector<string> readLinesFromFile(string file)
 {
     string filename(file);
@@ -112,7 +127,7 @@ int ValidImage(std::uint8_t* ImageBytes) {
     return -1;
 }
 
-bool isValidImage (const std::string filename) {
+bool isValidImage (const string filename) {
 
     std::fstream hFile(filename, std::ios::in | std::ios::binary);
 
@@ -137,7 +152,12 @@ bool isValidImage (const std::string filename) {
     return false;
 }
 
-string readOrderNumber(std::filesystem::path filePath) {
+string readOrderNumberFromFile(string file)
+{
+    return readOrderNumberFromFile(std::filesystem::path(file));
+}
+
+string readOrderNumberFromFile(std::filesystem::path filePath) {
 	try {
 		//Check if a text document with name "overlay.txt" exists and use the containing number as order number
 		filePath = filePath / orderNumberFile;
@@ -209,6 +229,29 @@ void printVersion()
 
 int main(int argc, char * argv[]) {
 
+#ifdef _WIN32
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    width = csbi.srWindow.Right - csbi.srWindow.Left;
+#else
+    struct winsize win;
+    ioctl(0, TIOCGWINSZ, &win);
+    width = win.ws_col;
+#endif
+    
+	argparse::ArgumentParser program("resize-image");
+	
+	program.add_argument("-h","--help")
+	.help("Resize pictures and add custom text as overlay");
+
+	try {
+		program.parse_args(argc, argv);
+	} catch (const std::runtime_error& err) {
+		std::cout << err.what() << std::endl;
+		std::cout << program;
+		exit(0);
+	}
+	
 	printVersion();
 	
 	if (argc < 2) {
@@ -216,32 +259,16 @@ int main(int argc, char * argv[]) {
 		exit(1);
     } else if (argc == 2) {
         // populate vector with content of folder
-        files = getFilesFromPath( argv[1] );
+        files = getAllPictures( getFilesFromPath( argv[1] ) );
     } else {
         // populate vector with arguments
         // Iterate over arguments
-        for (char **pargv = argv+1; *pargv != argv[argc]; pargv++) {
+        for (char **pargv = argv+1; *pargv != argv[argc]; pargv++)
+        {
             files.push_back(*pargv);
         }
+        files = getAllPictures(files);
     }
-
-	
-    // Demo code to read files
-    for (auto file : files)
-    {
-        std::cout << file << " | ";
-    }
-    std::cout << std::endl;
-
-	#ifdef _WIN32
-		CONSOLE_SCREEN_BUFFER_INFO csbi;
-		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-		width = csbi.srWindow.Right - csbi.srWindow.Left;
-	#else
-		struct winsize win;
-		ioctl(0, TIOCGWINSZ, &win);
-		width = win.ws_col;
-	#endif
 	
 	unsigned int total = steps * (argc - 1);
 	ProgressBar progressBar(total, width, '#', '-');
@@ -250,10 +277,7 @@ int main(int argc, char * argv[]) {
 	for (++argv; *argv; ++argv) {
 		
 		char* originalFile = *argv;
-		std::string strOriginalFile(originalFile);
-		
-		// skip argument if it is not an image
-		if ( ! isValidImage(strOriginalFile) ) { cout << "Not an image!" << endl; continue; }
+		string strOriginalFile(originalFile);
 					
 		// Create path objects
 		// path to original file
@@ -266,7 +290,7 @@ int main(int argc, char * argv[]) {
 		
 		// read order number once
 		if ( strOrderNumber.length() == 0 ) {
-			strOrderNumber = readOrderNumber( pathOriginalFile.parent_path() );
+			strOrderNumber = readOrderNumberFromFile( pathOriginalFile.parent_path() );
 			orderNumber = strOrderNumber.c_str();
 			if (useOverlay) {
 				cout << "Use text from \"overlay.txt\": " << orderNumber << endl;
@@ -300,8 +324,8 @@ int main(int argc, char * argv[]) {
 
 						// get size of resized image
 						resizedImageSize = resizedImage.width() * resizedImage.height();
-						// cout << "Calculating optimum text size." << endl;
-						
+                        
+						// Calculating optimum text size.
 						try {
 							// Create textbox
 							if ( textSize == 0 ) {

@@ -39,6 +39,7 @@ using namespace cimg_library;
 #include <dirent.h>
 
 #include "ProgressBar.hpp"
+#include <argparse/argparse.hpp>
 
 using namespace std;
 
@@ -90,5 +91,12 @@ CImg<unsigned char> resizedImage;
 CImg<unsigned char> textbackground;
 CImg<unsigned char> textbox;
 
+bool isValidImage (const string file);
+string readOrderNumberFromFile(const string& file);
+string readOrderNumberFromFile(std::filesystem::path filePath);
+int high_low(int high,int low);
+float getTextSize (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance);
+void printVersion();
 std::vector<char *> getFilesFromPath(char* path);
+std::vector<char *> getAllPictures(std::vector<char *>);
 vector<string> readLinesFromFile(string file);
