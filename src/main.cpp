@@ -182,19 +182,21 @@ string readOrderNumberFromFile(std::filesystem::path filePath) {
     return NULL;
 }
 
-int high_low(int high,int low) {
+int high_low(int high,int low)
+{
     return (high - low) / 2;
 }
 
-float getTextSize (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance) {
+float getTextSize (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance)
+{
     int size = initialSize;
     float coveredArea = 0;
     int low = 0, high = 0;
     CImg<unsigned char> textbox;
+	CImg<unsigned char> textboxbg;
 	
-	try {
-
-		while ( (coveredArea < (toBeCovered - tolerance)) || (coveredArea > (toBeCovered + tolerance)) ) {
+	do {
+		try {
 			// Create textbox
 			textbox.draw_text(0,0,text,white,black,1,size);
 			// get width and height of textbox
@@ -214,10 +216,19 @@ float getTextSize (const char * text, int initialSize, float coveredSize, float 
 			}
 			// Empty textbox
 			textbox.assign();
+		} catch (const char* msg) {
+			cerr << msg << endl;
 		}
-	} catch (const char* msg) {
-		cerr << msg << endl;
-	}
+	} while (!( (coveredArea < (toBeCovered - tolerance)) || (coveredArea > (toBeCovered + tolerance)) ));
+	
+	// Create textbox
+	//textbox.draw_text(0,0,text,white,black,1,size);
+	// create background image with size of textbox
+	textboxbg.assign(textbox.width() ,textbox.height() ,1,3,0);
+	// fill it black
+	textboxbg.fill(backgroundColor);
+	// draw text on background
+	textboxbg.draw_text(0,0,orderNumber,green,black,1,size);
     return size;
 }
 
@@ -270,6 +281,9 @@ int main(int argc, char * argv[]) {
         files = getAllPictures(files);
     }
 	
+	// Get textbox with text in correct size
+	textbox = getTextSize(orderNumber, sqrt(newimage_width * newimage_height / 100 * coveragePercent) , static_cast<float>(newimage_width * newimage_height), coveragePercent, tolerance);
+	
 	unsigned int total = steps * (argc - 1);
 	ProgressBar progressBar(total, width, '#', '-');
 
@@ -318,31 +332,9 @@ int main(int argc, char * argv[]) {
 					cerr << msg << endl;
 				}
 
-				// get size of resized image
-				resizedImageSize = resizedImage.width() * resizedImage.height();
-				
-				// Calculating optimum text size.
-				try {
-					// Create textbox
-					if ( textSize == 0 ) {
-						// use a reasonable initial size value
-						textSize = getTextSize(orderNumber, sqrt(resizedImageSize / 100 * coveragePercent) , static_cast<float>(resizedImageSize), coveragePercent, tolerance);
-						textbox.draw_text(0, 0, orderNumber, white, black, 1, textSize);
-						// create background image with size of textbox
-						textbackground.assign(textbox.width() ,textbox.height() ,1,3,0);
-						// fill it black
-						textbackground.fill(backgroundColor);
-						// draw text on background
-						textbackground.draw_text(0,0,orderNumber,green,black,1,textSize);
-					}
-				} catch (const char* msg) {
-					cerr << msg << endl;
-				}
-				// t.report();
-				
 				try {
 					// draw text box in left top corner
-					resizedImage.draw_image(posX,posY,textbackground);
+					resizedImage.draw_image(posX,posY,textbox);
 				} catch (const char* msg) {
 					cerr << msg << endl;
 				}
@@ -351,7 +343,6 @@ int main(int argc, char * argv[]) {
 				++progressBar;
 				progressBar.display();
 				// save modified image
-				//cout << "Saving resized image: " << filename << endl;
 				try {
 					resizedImage.save_jpeg( pathResizedFile.generic_string().c_str(), 90);
 				} catch (const char* msg) {

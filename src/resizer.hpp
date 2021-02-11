@@ -65,6 +65,7 @@ int newimage_width = 800;
 int newimage_height = 600;
 const float coveragePercent = 2.0;
 const float tolerance = 0.1;
+// Black background color
 const int backgroundColor = 255;
 const int posX = 0;
 const int posY = 0;
