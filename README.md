@@ -33,13 +33,14 @@ conan build ..
 cd <path/to/source>
 conan install . --build=missing
 ````
-This command will generate a file 'conanbuildinfo.xcconfig'.
-With Xcode create a new project for a CLI-Tool.
+This command will generate a file 'conanbuildinfo.xcconfig' in the current folder.
+Within Xcode create a new project for a CLI-Tool.
 Remove demo code.
 Right click on project and add files 
 - 'conanbuildinfo.xcconfig'
 - folder 'src'
+- any other file/folder that you want to add
 
-In build settings of target exclude architecture 'arm64' or 'x86'
+In build settings of target exclude architecture 'arm64' or 'x86_64'
 In project info choose 'conanbuildinfo' for debug and release configuration
 
