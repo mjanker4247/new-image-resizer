@@ -15,7 +15,6 @@ class resize_images(ConanFile):
 		self.requires("zlib/1.2.11")
 		self.requires("libpng/1.6.37")
 		self.requires("libjpeg/9d")
-		self.requires("argparse/2.1")
 
 	def package(self):
 		self.copy("*.h")
