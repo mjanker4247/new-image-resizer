@@ -204,8 +204,11 @@ CImg<unsigned char> getTextbox (const char * text, int initialSize, float covere
 	 * and calculate the covered area
 	 * the difference factor can then be used as final text size
 	 */
-	do {
+	while (( (coveredArea < (toBeCovered - tolerance)) || (coveredArea > (toBeCovered + tolerance)) )) {
 		try {
+
+			// Empty textbox
+			textbox.assign();
 			// Create textbox
 			textbox.draw_text(0,0,text,white,black,1,size);
 			// get width and height of textbox
@@ -225,12 +228,10 @@ CImg<unsigned char> getTextbox (const char * text, int initialSize, float covere
 				low = size;
 				size += high_low(high, low);
 			}
-			// Empty textbox
-			textbox.assign();
 		} catch (const char* msg) {
 			cerr << msg << endl;
 		}
-	} while (!( (coveredArea < (toBeCovered - tolerance)) || (coveredArea > (toBeCovered + tolerance)) ));
+	}
 	
 	// Create textbox
 	//textbox.draw_text(0,0,text,white,black,1,size);

@@ -39,7 +39,6 @@ using namespace cimg_library;
 #include <dirent.h>
 
 #include "ProgressBar.hpp"
-#include <argparse/argparse.hpp>
 
 using namespace std;
 
