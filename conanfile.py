@@ -15,38 +15,6 @@ class resize_images(ConanFile):
 		self.requires("zlib/1.2.11")
 		self.requires("libpng/1.6.37")
 		self.requires("libjpeg/9d")
-		self.requires("boost/1.75.0")
-		
-	def configure(self):		
-		self.options["boost"].without_atomic = True
-		self.options["boost"].without_chrono = True
-		self.options["boost"].without_container = False
-		self.options["boost"].without_context = True
-		self.options["boost"].without_contract = True
-		self.options["boost"].without_coroutine = True
-		self.options["boost"].without_date_time = True
-		self.options["boost"].without_exception = False
-		self.options["boost"].without_fiber = True
-		self.options["boost"].without_filesystem = False
-		self.options["boost"].without_graph = True
-		self.options["boost"].without_graph_parallel = True
-		self.options["boost"].without_iostreams = True
-		self.options["boost"].without_locale = True
-		self.options["boost"].without_log = True
-		self.options["boost"].without_math = True
-		self.options["boost"].without_mpi = True
-		self.options["boost"].without_program_options = False
-		self.options["boost"].without_python = True
-		self.options["boost"].without_random = True
-		self.options["boost"].without_regex = False
-		self.options["boost"].without_serialization = True
-		self.options["boost"].without_stacktrace = True
-		self.options["boost"].without_system = False 
-		self.options["boost"].without_test = True
-		self.options["boost"].without_thread = True
-		self.options["boost"].without_timer = True
-		self.options["boost"].without_type_erasure = True
-		self.options["boost"].without_wave = True
 
 	def package(self):
 		self.copy("*.h")
@@ -57,7 +25,6 @@ class resize_images(ConanFile):
 			tools.run_in_windows_bash(self, tools.unix_path(command))
 		else:
 			self.run(command)
-			
 
 	def _build_autotools(self, configure_args=None):
 		env_build = AutoToolsBuildEnvironment(self, win_bash=tools.os_info.is_windows)

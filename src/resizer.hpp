@@ -24,8 +24,6 @@ using namespace cimg_library;
 #include <cstring>
 #include <cstdio>
 #include <cstdint>
-#include <iostream>
-#include <fstream>
 #include <cstdint>
 #include <vector>
 #include <array>
@@ -33,18 +31,15 @@ using namespace cimg_library;
 #include <future>
 #include <chrono>
 #include <algorithm> 
-
-// Boost
-#include <boost/regex.hpp>
-#include <boost/range/iterator_range.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-//#include <boost/timer/timer.hpp>
-namespace fs = boost::filesystem;
-//namespace po = boost::program_options;
-
+#include <regex>
+#include <iostream>
+#include <fstream>
+#include <filesystem>
+#include <regex>
+#include <dirent.h>
 
 #include "ProgressBar.hpp"
+
 using namespace std;
 
 
@@ -65,13 +60,21 @@ enum IMAGE_TYPE {
 };
 
 // Declare variables
+/*
+ * This values can be stored in a config file
+ */
 int newimage_width = 800;
 int newimage_height = 600;
 const float coveragePercent = 2.0;
 const float tolerance = 0.1;
+// Black background color
 const int backgroundColor = 255;
 const int posX = 0;
 const int posY = 0;
+char resizedAppendix[] = "_resized";
+char destDir[] = "Originale";
+string orderNumberFile = "overlay.txt";
+
 const char * orderNumber;
 int textboxWidth;
 int textboxHeight;
@@ -84,12 +87,21 @@ int width;
 int steps = 5;
 bool isFolder = false;
 bool isFile = false;
+std::vector<char *> files;
 
-char resizedAppendix[] = "_resized";
-char destDir[] = "Originale";
-string orderNumberFile = "overlay.txt";
+
 bool useOverlay = false;
 CImg<unsigned char> originalImage;
 CImg<unsigned char> resizedImage;
 CImg<unsigned char> textbackground;
 CImg<unsigned char> textbox;
+
+bool isValidImage (const string file);
+string readOrderNumberFromFile(const string& file);
+string readOrderNumberFromFile(std::filesystem::path filePath);
+int high_low(int high,int low);
+CImg<unsigned char> getTextbox (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance);
+void printVersion();
+std::vector<char *> getFilesFromDirectory(char* path);
+std::vector<char *> getAllPictures(std::vector<char *>);
+vector<string> readLinesFromFile(string file);

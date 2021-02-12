@@ -8,6 +8,72 @@
 
 #include "resizer.hpp"
 
+#ifdef BOOST_WINDOWS_API
+std::ostream &MessageBox(std::ostream &s) {
+    std::ostringstream *st = dynamic_cast<std::ostringstream *>(&s);
+    if (NULL != st)
+        ::MessageBox(NULL, st->str().c_str(), "", MB_OK);
+    return s;
+}
+
+void showMessage(const string& s) {
+    std::ostringstream stm;
+    stm  << "Number of arguments: " << s << MessageBox;
+}
+#endif
+
+std::vector<char *> getFilesFromDirectory(char* path)
+{
+    DIR *dir; struct dirent *diread;
+    vector<char *> files;
+
+    if ((dir = opendir(path)) != nullptr) {
+        while ((diread = readdir(dir)) != nullptr) {
+            files.push_back(diread->d_name);
+        }
+        closedir (dir);
+    } else {
+        perror ("opendir");
+    }
+    return files;
+}
+
+std::vector<char *> getAllPictures(std::vector<char *> files)
+{
+    vector<char *> pictures;
+
+    for (auto file : files)
+    {
+        if (isValidImage(file))
+        {
+            pictures.push_back(file);
+        }
+            
+    }
+    return pictures;
+}
+
+vector<string> readLinesFromFile(string file)
+{
+    string filename(file);
+    vector<string> lines;
+    string line;
+
+    ifstream input_file(filename, std::ifstream::in);
+    if (!input_file.is_open()) {
+        cerr << "Could not open the file - '"
+             << filename << "'" << endl;
+    }
+
+    while (getline(input_file, line)){
+        lines.push_back(line);
+    }
+
+    input_file.close();
+    return lines;
+}
+
+
 CImg<unsigned char> resizeKeepAspectRatio(CImg<unsigned char> srcImage, const float dstWidth, const float dstHeight) {
 	float scaleHeight;
 	float scaleWidth;
@@ -28,20 +94,6 @@ CImg<unsigned char> resizeKeepAspectRatio(CImg<unsigned char> srcImage, const fl
 
 	return srcImage.resize((int)(srcImage.width() * scale), (int)(srcImage.height() * scale),-100,-100,6);
 }
-
-#ifdef BOOST_WINDOWS_API
-std::ostream &MessageBox(std::ostream &s) {
-    std::ostringstream *st = dynamic_cast<std::ostringstream *>(&s);
-    if (NULL != st)
-        ::MessageBox(NULL, st->str().c_str(), "", MB_OK);
-    return s;
-}
-
-void showMessage(const string& s) {
-    std::ostringstream stm;
-    stm  << "Number of arguments: " << s << MessageBox;
-}
-#endif
 
 int ValidImage(std::uint8_t* ImageBytes) {
     const static std::vector<std::uint8_t> GIFBytesOne = { 0x47, 0x49, 0x46, 0x38, 0x37, 0x61 };
@@ -75,7 +127,8 @@ int ValidImage(std::uint8_t* ImageBytes) {
     return -1;
 }
 
-bool isValidImage (const std::string filename) {
+bool isValidImage (const string filename)
+{
 
     std::fstream hFile(filename, std::ios::in | std::ios::binary);
 
@@ -100,22 +153,28 @@ bool isValidImage (const std::string filename) {
     return false;
 }
 
-string getOrderNumber(fs::path filePath) {
+string readOrderNumberFromFile(string file)
+{
+    return readOrderNumberFromFile(std::filesystem::path(file));
+}
+
+string readOrderNumberFromFile(std::filesystem::path filePath) {
 	try {
 		//Check if a text document with name "overlay.txt" exists and use the containing number as order number
 		filePath = filePath / orderNumberFile;
-		if ( boost::filesystem::exists(filePath) ) {
+		if ( std::filesystem::exists(filePath) ) {
 			useOverlay = true;
-			boost::filesystem::ifstream inFile(filePath);
+			ifstream inFile(filePath);
 			string s;
 			std::getline(inFile,s); 
 			return s;
 		}
 
 		// Extract order and position number from complete path to file
-		static const boost::regex e("(\\d{7}_\\d{3})");
-		boost::smatch what;
-		if (boost::regex_search(filePath.generic_string(), what, e)) {
+		static const std::regex e("(\\d{7}_\\d{3})");
+		std::smatch what;
+        auto search = filePath.generic_string();
+		if (std::regex_search( search, what, e )) {
 			return what[1];
 		}
 	} catch (const char* msg) {
@@ -124,25 +183,40 @@ string getOrderNumber(fs::path filePath) {
     return NULL;
 }
 
-int high_low(int high,int low) {
+int high_low(int high,int low)
+{
     return (high - low) / 2;
 }
 
-float getTextSize (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance) {
+CImg<unsigned char> getTextbox (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance)
+{
     int size = initialSize;
     float coveredArea = 0;
     int low = 0, high = 0;
     CImg<unsigned char> textbox;
+	CImg<unsigned char> textboxbg;
 	
-	try {
+	/*
+	 * Calculate optimum size
+	 * This code can be optimized
+	 * Don't need to iterate to get the correct size
+	 * Use size of a reasonable textbox and size of area
+	 * and calculate the covered area
+	 * the difference factor can then be used as final text size
+	 */
+	while (( (coveredArea < (toBeCovered - tolerance)) || (coveredArea > (toBeCovered + tolerance)) )) {
+		try {
 
-		while ( (coveredArea < (toBeCovered - tolerance)) || (coveredArea > (toBeCovered + tolerance)) ) {
+			// Empty textbox
+			textbox.assign();
 			// Create textbox
 			textbox.draw_text(0,0,text,white,black,1,size);
 			// get width and height of textbox
 			textboxWidth = textbox.width();
 			textboxHeight = textbox.height();
+			// Area of textbox
 			textboxSize = textboxWidth * textboxHeight;
+			// Percentage of area covered
 			coveredArea = static_cast<float>(textboxSize)/coveredSize*100;
 
 			if (coveredArea > toBeCovered) {
@@ -154,202 +228,174 @@ float getTextSize (const char * text, int initialSize, float coveredSize, float 
 				low = size;
 				size += high_low(high, low);
 			}
-			// Empty textbox
-			textbox.assign();
-		}
-	} catch (const char* msg) {
-		cerr << msg << endl;
-	}
-    return size;
-}
-	
-std::vector<fs::path> getFolderContent(std::string path) {
-	
-	fs::path mypath(path);
-	fs::directory_iterator end_iter;
-
-	std::vector<fs::path> result_set;
-
-	if ( fs::exists(mypath) && fs::is_directory(mypath))
-	{
-		for( fs::directory_iterator dir_iter(mypath) ; dir_iter != end_iter ; ++dir_iter)
-		{
-			if (fs::is_regular_file(dir_iter->status()) )
-			{
-				result_set.push_back( *dir_iter );
-			}
+		} catch (const char* msg) {
+			cerr << msg << endl;
 		}
 	}
-	return result_set;
+	
+	// Create textbox
+	//textbox.draw_text(0,0,text,white,black,1,size);
+	// create background image with size of textbox
+	textboxbg.assign(textbox.width() ,textbox.height() ,1,3,0);
+	// fill it black
+	textboxbg.fill(backgroundColor);
+	// draw text on background
+	textboxbg.draw_text(0,0,text,green,black,1,size);
+    return textboxbg;
 }
+
 
 void printVersion()
 {
 	std::cout <<  "Version: " << VERSION << std::endl;
 }
+
 int main(int argc, char * argv[]) {
 
+#ifdef _WIN32
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    width = csbi.srWindow.Right - csbi.srWindow.Left;
+#else
+    struct winsize win;
+    ioctl(0, TIOCGWINSZ, &win);
+    width = win.ws_col;
+#endif
+	
 	printVersion();
 	
 	if (argc < 2) {
 		std::cout << "missing filename" << std::endl;
 		exit(1);
+    } else if (argc == 2) {
+		if ( std::filesystem::is_directory(argv[1]) ) {
+			// populate vector with content of folder
+			files = getAllPictures( getFilesFromDirectory( argv[1] ) );
+		} else if ( isValidImage(string(argv[1])) ){
+			files.push_back(argv[1]);
+		} else {
+			exit(EXIT_FAILURE);
+		}
+		
+    } else {
+        // populate vector with arguments
+        // Iterate over arguments
+        for (char **pargv = argv+1; *pargv != argv[argc]; pargv++)
+        {
+            files.push_back(*pargv);
+        }
+        files = getAllPictures(files);
+    }
+	
+	
+	// Use first file as reference
+	std::filesystem::path firstFilePath(files.at(0));
+	std::filesystem::path destDirectoryPath = firstFilePath.parent_path() / destDir;
+	// read order
+	if ( strOrderNumber.length() == 0 )
+	{
+		strOrderNumber = readOrderNumberFromFile( firstFilePath.parent_path() );
+		orderNumber = strOrderNumber.c_str();
+		if (useOverlay) {
+			cout << "Use text from \"overlay.txt\": " << orderNumber << endl;
+		} else {
+			cout << "Use text from filesystem: " << orderNumber << endl;
+		}
 	}
-
-	// populate vector with content of folder
-	std::vector<fs::path> dirListing = getFolderContent(argc>1? argv[1] : ".");
-
-	for (std::vector<fs::path>::iterator it = dirListing.begin() ; it != dirListing.end(); ++it)
-    	std::cout << ' ' << *it;
-  	std::cout << '\n';
-
-	#ifdef _WIN32
-		CONSOLE_SCREEN_BUFFER_INFO csbi;
-		GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-		width = csbi.srWindow.Right - csbi.srWindow.Left;
-	#else
-		struct winsize win;
-		ioctl(0, TIOCGWINSZ, &win);
-		width = win.ws_col;
-	#endif
+	// Create directory
+	if ( ! exists(destDirectoryPath))
+	{
+		try {
+			std::filesystem::create_directory(destDirectoryPath);
+		}
+		catch (const std::filesystem::filesystem_error& ex)
+		{
+			std::fprintf(stderr,"Filesystem Error: %s",ex.what());
+			system("pause");
+			exit(EXIT_FAILURE);
+		}
+	}
 	
-	unsigned int total = steps * (argc - 1);
+	// Get textbox with text in correct size
+	textbox = getTextbox(orderNumber, sqrt(newimage_width * newimage_height / 100 * coveragePercent) , static_cast<float>(newimage_width * newimage_height), coveragePercent, tolerance);
+	
+	unsigned int total = steps * ((unsigned int) files.size() );
 	ProgressBar progressBar(total, width, '#', '-');
-	
-	// One argument could be a folder
 
-	// Otherwise it is a picture?
-
-	// Iterate over arguments
-	for (++argv; *argv; ++argv) {
-		
-		char* originalFile = *argv;
-		std::string strOriginalFile(originalFile);
-		
-		// skip argument if it is not an image
-		if ( ! isValidImage(strOriginalFile) ) { cout << "Not an image!" << endl; continue; }
+	// Iterate over files
+	for (auto const& file: files )
+	{
 					
 		// Create path objects
 		// path to original file
-		fs::path pathOriginalFile(originalFile);
-		// path object to backup copy of original image file
-		fs::path pathDestDirectory = pathOriginalFile.parent_path() / destDir;
-		fs::path pathDestFile = pathOriginalFile.parent_path() / destDir / pathOriginalFile.filename();
+        std::filesystem::path originalFilePath(file);
+		// This folder should be already created before
+        std::filesystem::path destFilePath = originalFilePath.parent_path() / destDir / originalFilePath.filename();
 		// path object to resized image file
-		fs::path pathResizedFile = pathOriginalFile.parent_path() / (fs::path(pathOriginalFile.stem().string() + resizedAppendix ).string() + pathOriginalFile.extension().string());
-		
-		// read order number once
-		if ( strOrderNumber.length() == 0 ) {
-			strOrderNumber = getOrderNumber( pathOriginalFile.parent_path() );
-			orderNumber = strOrderNumber.c_str();
-			if (useOverlay) {
-				cout << "Use text from \"overlay.txt\": " << orderNumber << endl;
-			} else {
-				cout << "Use text from filesystem: " << orderNumber << endl;
-			}
-		}
+        std::filesystem::path resizedFilePath = originalFilePath.parent_path() / (std::filesystem::path(originalFilePath.stem().string() + resizedAppendix ).string() + originalFilePath.extension().string());
 		
 		// Step 1
 		++progressBar;
 		progressBar.display();
 		
-		if ((exists(pathOriginalFile)) ) {
-			if (is_regular_file(pathOriginalFile)) {
+		try {
+			originalImage.load(file);
+
+			if (originalImage) {
+				// Step 2
+				++progressBar;
+				progressBar.display();
+				/*
+				 * Resize original image
+				 * Use async function
+				 */
+				
+				std::future< CImg<unsigned char> > resultFromResize = std::async(std::launch::async, resizeKeepAspectRatio, originalImage,newimage_width,newimage_height);
+
 				try {
-					
-					originalImage.load(originalFile);
-
-					if (originalImage) {
-						// Step 2
-						++progressBar;
-						progressBar.display();
-						// resize original image
-						std::future< CImg<unsigned char> > resultFromResize = std::async(std::launch::async, resizeKeepAspectRatio, originalImage,newimage_width,newimage_height);
-
-						try {
-							resizedImage = resultFromResize.get();
-						} catch (const char* msg) {
-							cerr << msg << endl;
-						}
-
-						// get size of resized image
-						resizedImageSize = resizedImage.width() * resizedImage.height();
-						// cout << "Calculating optimum text size." << endl;
-						
-						try {
-							// Create textbox
-							if ( textSize == 0 ) {
-								// use a reasonable initial size value
-								textSize = getTextSize(orderNumber, sqrt(resizedImageSize / 100 * coveragePercent) , static_cast<float>(resizedImageSize), coveragePercent, tolerance);
-								textbox.draw_text(0, 0, orderNumber, white, black, 1, textSize);
-								// create background image with size of textbox
-								textbackground.assign(textbox.width() ,textbox.height() ,1,3,0);
-								// fill it black
-								textbackground.fill(backgroundColor);
-								// draw text on background
-								textbackground.draw_text(0,0,orderNumber,green,black,1,textSize);
-							}
-						} catch (const char* msg) {
-							cerr << msg << endl;
-						}
-						// t.report();
-						
-						try {
-							// draw text box in left top corner
-							resizedImage.draw_image(posX,posY,textbackground);
-						} catch (const char* msg) {
-							cerr << msg << endl;
-						}
-
-						// Step 3
-						++progressBar;
-						progressBar.display();
-						// save modified image
-						//cout << "Saving resized image: " << filename << endl;
-						try {
-							resizedImage.save_jpeg( pathResizedFile.generic_string().c_str(), 90);
-						} catch (const char* msg) {
-							cerr << msg << endl;
-						}
-						
-						// move original image to destination folder
-						// Create directory
-						if ( ! exists(pathDestDirectory)) {
-							try {
-								boost::filesystem::create_directory(pathDestDirectory);
-							}
-							catch (const fs::filesystem_error& ex)
-							{
-								std::fprintf(stderr,"Filesystem Error: %s",ex.what());
-								system("pause");
-							}
-						}
-
-						// Step 4
-						// Move original image
-						++progressBar;
-						progressBar.display();
-						//cout << "Moving original imgage to " << pathDestFile.parent_path() << endl;
-						try {
-							boost::filesystem::rename(pathOriginalFile,pathDestFile);
-						}
-						catch (const fs::filesystem_error& ex)
-						{
-							std::fprintf(stderr,"Filesystem Error: %s",ex.what());
-							system("pause");
-						}
-					}
-				} catch (CImgException) {
-					std::cout << "Image " << pathOriginalFile << " not recognized" << std::endl;
-					system("pause");
-					originalImage.assign();
+					resizedImage = resultFromResize.get();
+				} catch (const char* msg) {
+					cerr << msg << endl;
 				}
 
-			} else if (is_directory(pathOriginalFile)) {
-				// is path p a directory?
-				cout << pathOriginalFile << " is a directory.\n";
-				system("pause");
+				try {
+					// draw text box in left top corner
+					resizedImage.draw_image(posX,posY,textbox);
+				} catch (const char* msg) {
+					cerr << msg << endl;
+				}
+
+				// Step 3
+				++progressBar;
+				progressBar.display();
+				// save modified image
+				try {
+					resizedImage.save_jpeg( resizedFilePath.generic_string().c_str(), 90);
+				} catch (const char* msg) {
+					cerr << msg << endl;
+				}
+				
+				// move original image to destination folder
+				
+
+				// Step 4
+				// Move original image
+				++progressBar;
+				progressBar.display();
+				//cout << "Moving original imgage to " << pathDestFile.parent_path() << endl;
+				try {
+					std::filesystem::rename(originalFilePath,destFilePath);
+				}
+				catch (const std::filesystem::filesystem_error& ex)
+				{
+					std::fprintf(stderr,"Filesystem Error: %s",ex.what());
+					exit(EXIT_FAILURE);
+				}
 			}
+		} catch (CImgException) {
+			std::cout << "Image " << originalFilePath << " not recognized" << std::endl;
+			originalImage.assign();
+			exit(EXIT_FAILURE);
 		}
 		
 		// Step 5
@@ -364,6 +410,5 @@ int main(int argc, char * argv[]) {
 //    std::cout << "Width: " << textboxWidth << std::endl;
 //    std::cout << "Height: " << textboxHeight << std::endl;
 //    std::cout << "File size: " << file_size( originalFile ) << std::endl;
-	// system("pause");
     return 0;
 }
