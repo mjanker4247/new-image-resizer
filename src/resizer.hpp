@@ -61,6 +61,9 @@ enum IMAGE_TYPE {
 };
 
 // Declare variables
+/*
+ * This values can be stored in a config file
+ */
 int newimage_width = 800;
 int newimage_height = 600;
 const float coveragePercent = 2.0;
@@ -69,6 +72,10 @@ const float tolerance = 0.1;
 const int backgroundColor = 255;
 const int posX = 0;
 const int posY = 0;
+char resizedAppendix[] = "_resized";
+char destDir[] = "Originale";
+string orderNumberFile = "overlay.txt";
+
 const char * orderNumber;
 int textboxWidth;
 int textboxHeight;
@@ -83,9 +90,7 @@ bool isFolder = false;
 bool isFile = false;
 std::vector<char *> files;
 
-char resizedAppendix[] = "_resized";
-char destDir[] = "Originale";
-string orderNumberFile = "overlay.txt";
+
 bool useOverlay = false;
 CImg<unsigned char> originalImage;
 CImg<unsigned char> resizedImage;
@@ -96,7 +101,7 @@ bool isValidImage (const string file);
 string readOrderNumberFromFile(const string& file);
 string readOrderNumberFromFile(std::filesystem::path filePath);
 int high_low(int high,int low);
-float getTextSize (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance);
+CImg<unsigned char> getTextbox (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance);
 void printVersion();
 std::vector<char *> getFilesFromDirectory(char* path);
 std::vector<char *> getAllPictures(std::vector<char *>);
