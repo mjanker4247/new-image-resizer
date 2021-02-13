@@ -22,35 +22,42 @@ void showMessage(const string& s) {
 }
 #endif
 
-std::vector<char *> getFilesFromDirectory(char* path)
-{
-    DIR *dir; struct dirent *diread;
-    vector<char *> files;
-
-    if ((dir = opendir(path)) != nullptr) {
-        while ((diread = readdir(dir)) != nullptr) {
-            files.push_back(diread->d_name);
-        }
-        closedir (dir);
-    } else {
-        perror ("opendir");
-    }
-    return files;
+std::vector<fs::path> getFilesFromDirectory(char* path) {
+	std::vector<fs::path> mFiles;
+	for (auto& p: fs::directory_iterator(fs::path(path)))
+		if (fs::is_regular_file(p.path()))
+			mFiles.push_back(p.path());
+	
+    return mFiles;
 }
 
-std::vector<char *> getAllPictures(std::vector<char *> files)
+std::vector<fs::path> getAllPictures(std::vector<char *> files)
 {
-    vector<char *> pictures;
+    vector<fs::path> pictures;
 
     for (auto file : files)
     {
         if (isValidImage(file))
         {
-            pictures.push_back(file);
+            pictures.push_back(fs::path(file));
         }
             
     }
     return pictures;
+}
+std::vector<fs::path> getAllPictures(std::vector<fs::path> files)
+{
+	vector<fs::path> pictures;
+
+	for (auto file : files)
+	{
+		if (isValidImage(file))
+		{
+			pictures.push_back(file);
+		}
+			
+	}
+	return pictures;
 }
 
 vector<string> readLinesFromFile(string file)
@@ -127,8 +134,7 @@ int ValidImage(std::uint8_t* ImageBytes) {
     return -1;
 }
 
-bool isValidImage (const string filename)
-{
+bool isValidImage (const string filename) {
 
     std::fstream hFile(filename, std::ios::in | std::ios::binary);
 
@@ -153,8 +159,7 @@ bool isValidImage (const string filename)
     return false;
 }
 
-string readOrderNumberFromFile(string file)
-{
+string readOrderNumberFromFile(string file) {
     return readOrderNumberFromFile(std::filesystem::path(file));
 }
 
@@ -183,13 +188,11 @@ string readOrderNumberFromFile(std::filesystem::path filePath) {
     return NULL;
 }
 
-int high_low(int high,int low)
-{
+int high_low(int high,int low) {
     return (high - low) / 2;
 }
 
-CImg<unsigned char> getTextbox (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance)
-{
+CImg<unsigned char> getTextbox (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance) {
     int size = initialSize;
     float coveredArea = 0;
     int low = 0, high = 0;
@@ -244,9 +247,63 @@ CImg<unsigned char> getTextbox (const char * text, int initialSize, float covere
     return textboxbg;
 }
 
+void resizeAndStore(fs::path file) {
+	
+	CImg<unsigned char> originalImage;
+	CImg<unsigned char> resizedImage;
+	
+	// Create path objects
+	// path to original file
+	std::filesystem::path originalFilePath(file);
+	// This folder should be already created before
+	std::filesystem::path destFilePath = originalFilePath.parent_path() / destDir / originalFilePath.filename();
+	// path object to resized image file
+	std::filesystem::path resizedFilePath = originalFilePath.parent_path() / (std::filesystem::path(originalFilePath.stem().string() + resizedAppendix ).string() + originalFilePath.extension().string());
 
-void printVersion()
-{
+	try {
+		originalImage.load(file.c_str());
+
+		if (originalImage) {
+
+			/*
+			 * Resize original image
+			 * Use async function
+			 */
+			resizeKeepAspectRatio(originalImage,newimage_width,newimage_height);
+
+			try {
+				// draw text box in left top corner
+				resizedImage.draw_image(posX,posY,textbox);
+			} catch (const char* msg) {
+				cerr << msg << endl;
+			}
+
+			// save modified image
+			try {
+				resizedImage.save_jpeg( resizedFilePath.generic_string().c_str(), 90);
+			} catch (const char* msg) {
+				cerr << msg << endl;
+			}
+
+			// move original image to destination folder
+			try {
+				std::filesystem::rename(originalFilePath,destFilePath);
+			}
+			catch (const std::filesystem::filesystem_error& ex)
+			{
+				std::fprintf(stderr,"Filesystem Error: %s",ex.what());
+				exit(EXIT_FAILURE);
+			}
+			
+		}
+	} catch (CImgException) {
+		std::cout << "Image " << originalFilePath << " not recognized" << std::endl;
+		originalImage.assign();
+		exit(EXIT_FAILURE);
+	}
+}
+
+void printVersion() {
 	std::cout <<  "Version: " << VERSION << std::endl;
 }
 
@@ -265,32 +322,32 @@ int main(int argc, char * argv[]) {
 	printVersion();
 	
 	if (argc < 2) {
-		std::cout << "missing filename" << std::endl;
-		exit(1);
+		std::cout << "missing picture or folder" << std::endl;
+		exit(EXIT_SUCCESS);
     } else if (argc == 2) {
-		if ( std::filesystem::is_directory(argv[1]) ) {
+		if ( fs::is_directory(argv[1]) ) {
 			// populate vector with content of folder
-			files = getAllPictures( getFilesFromDirectory( argv[1] ) );
-		} else if ( isValidImage(string(argv[1])) ){
+			files = getFilesFromDirectory( argv[1] );
+		} else if ( fs::is_regular_file( argv[1]) ){
 			files.push_back(argv[1]);
 		} else {
 			exit(EXIT_FAILURE);
 		}
-		
     } else {
         // populate vector with arguments
         // Iterate over arguments
         for (char **pargv = argv+1; *pargv != argv[argc]; pargv++)
         {
-            files.push_back(*pargv);
-        }
-        files = getAllPictures(files);
-    }
+			if ( fs::is_regular_file( *pargv ) )
+				files.push_back(*pargv);
+		}
+	}
+	files = getAllPictures(files);
 	
 	
 	// Use first file as reference
-	std::filesystem::path firstFilePath(files.at(0));
-	std::filesystem::path destDirectoryPath = firstFilePath.parent_path() / destDir;
+	fs::path firstFilePath(files.at(0));
+	fs::path destDirectoryPath = firstFilePath.parent_path() / destDir;
 	// read order
 	if ( strOrderNumber.length() == 0 )
 	{
@@ -299,7 +356,7 @@ int main(int argc, char * argv[]) {
 		if (useOverlay) {
 			cout << "Use text from \"overlay.txt\": " << orderNumber << endl;
 		} else {
-			cout << "Use text from filesystem: " << orderNumber << endl;
+			cout << "Use text from directory structure: " << orderNumber << endl;
 		}
 	}
 	// Create directory
@@ -311,104 +368,26 @@ int main(int argc, char * argv[]) {
 		catch (const std::filesystem::filesystem_error& ex)
 		{
 			std::fprintf(stderr,"Filesystem Error: %s",ex.what());
-			system("pause");
 			exit(EXIT_FAILURE);
 		}
 	}
 	
 	// Get textbox with text in correct size
 	textbox = getTextbox(orderNumber, sqrt(newimage_width * newimage_height / 100 * coveragePercent) , static_cast<float>(newimage_width * newimage_height), coveragePercent, tolerance);
-	
-	unsigned int total = steps * ((unsigned int) files.size() );
-	ProgressBar progressBar(total, width, '#', '-');
 
-	// Iterate over files
+	auto start = std::chrono::steady_clock::now();
+	std::vector<std::future<void>> futures;
+
 	for (auto const& file: files )
 	{
-					
-		// Create path objects
-		// path to original file
-        std::filesystem::path originalFilePath(file);
-		// This folder should be already created before
-        std::filesystem::path destFilePath = originalFilePath.parent_path() / destDir / originalFilePath.filename();
-		// path object to resized image file
-        std::filesystem::path resizedFilePath = originalFilePath.parent_path() / (std::filesystem::path(originalFilePath.stem().string() + resizedAppendix ).string() + originalFilePath.extension().string());
-		
-		// Step 1
-		++progressBar;
-		progressBar.display();
-		
-		try {
-			originalImage.load(file);
-
-			if (originalImage) {
-				// Step 2
-				++progressBar;
-				progressBar.display();
-				/*
-				 * Resize original image
-				 * Use async function
-				 */
-				
-				std::future< CImg<unsigned char> > resultFromResize = std::async(std::launch::async, resizeKeepAspectRatio, originalImage,newimage_width,newimage_height);
-
-				try {
-					resizedImage = resultFromResize.get();
-				} catch (const char* msg) {
-					cerr << msg << endl;
-				}
-
-				try {
-					// draw text box in left top corner
-					resizedImage.draw_image(posX,posY,textbox);
-				} catch (const char* msg) {
-					cerr << msg << endl;
-				}
-
-				// Step 3
-				++progressBar;
-				progressBar.display();
-				// save modified image
-				try {
-					resizedImage.save_jpeg( resizedFilePath.generic_string().c_str(), 90);
-				} catch (const char* msg) {
-					cerr << msg << endl;
-				}
-				
-				// move original image to destination folder
-				
-
-				// Step 4
-				// Move original image
-				++progressBar;
-				progressBar.display();
-				//cout << "Moving original imgage to " << pathDestFile.parent_path() << endl;
-				try {
-					std::filesystem::rename(originalFilePath,destFilePath);
-				}
-				catch (const std::filesystem::filesystem_error& ex)
-				{
-					std::fprintf(stderr,"Filesystem Error: %s",ex.what());
-					exit(EXIT_FAILURE);
-				}
-			}
-		} catch (CImgException) {
-			std::cout << "Image " << originalFilePath << " not recognized" << std::endl;
-			originalImage.assign();
-			exit(EXIT_FAILURE);
-		}
-		
-		// Step 5
-		++progressBar;
-		progressBar.display();
-
+		futures.push_back (std::async(resizeAndStore, file) );
 	}
-	std::this_thread::sleep_for(std::chrono::milliseconds(300));
-	progressBar.done();
 	
-//    std::cout << "Text size: " << textSize << std::endl;
-//    std::cout << "Width: " << textboxWidth << std::endl;
-//    std::cout << "Height: " << textboxHeight << std::endl;
-//    std::cout << "File size: " << file_size( originalFile ) << std::endl;
+	auto end = std::chrono::steady_clock::now();
+	auto diff = end - start;
+	std::cout << std::chrono::duration <double, std::milli> (diff).count() << " ms" << std::endl;
+	
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	
     return 0;
 }

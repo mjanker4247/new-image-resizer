@@ -35,8 +35,8 @@ using namespace cimg_library;
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+namespace fs = std::filesystem;
 #include <regex>
-#include <dirent.h>
 
 #include "ProgressBar.hpp"
 
@@ -83,16 +83,10 @@ int resizedImageSize;
 int textSize = 0;
 string strOrderNumber;
 int width;
-// Define number of steps to be reported in progress
-int steps = 5;
-bool isFolder = false;
-bool isFile = false;
-std::vector<char *> files;
+std::vector<fs::path> files;
 
 
 bool useOverlay = false;
-CImg<unsigned char> originalImage;
-CImg<unsigned char> resizedImage;
 CImg<unsigned char> textbackground;
 CImg<unsigned char> textbox;
 
@@ -102,6 +96,8 @@ string readOrderNumberFromFile(std::filesystem::path filePath);
 int high_low(int high,int low);
 CImg<unsigned char> getTextbox (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance);
 void printVersion();
-std::vector<char *> getFilesFromDirectory(char* path);
-std::vector<char *> getAllPictures(std::vector<char *>);
+std::vector<fs::path> getFilesFromDirectory(char* path);
+std::vector<fs::path> getAllPictures(std::vector<char *>);
+std::vector<fs::path> getAllPictures(std::vector<fs::path>);
 vector<string> readLinesFromFile(string file);
+void resizeAndStore(fs::path file);
