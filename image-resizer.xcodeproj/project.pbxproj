@@ -43,7 +43,7 @@
 		1DB9AC7225CDA29F00AC574A /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		1DB9AC7325CDA29F00AC574A /* conanfile.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = conanfile.py; sourceTree = "<group>"; };
 		1DB9AC7425CDA29F00AC574A /* conanfile.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = conanfile.txt; sourceTree = "<group>"; };
-		1DCCF2E425D999F800FA2946 /* image-resizer_arm64 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "image-resizer_arm64"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DCCF2E425D999F800FA2946 /* image-resizer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "image-resizer"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,7 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				1DB9AC5925CDA10300AC574A /* image-resizer_x86 */,
-				1DCCF2E425D999F800FA2946 /* image-resizer_arm64 */,
+				1DCCF2E425D999F800FA2946 /* image-resizer */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,9 +118,9 @@
 			productReference = 1DB9AC5925CDA10300AC574A /* image-resizer_x86 */;
 			productType = "com.apple.product-type.tool";
 		};
-		1DCCF2DC25D999F800FA2946 /* image-resizer_arm64 */ = {
+		1DCCF2DC25D999F800FA2946 /* image-resizer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1DCCF2E125D999F800FA2946 /* Build configuration list for PBXNativeTarget "image-resizer_arm64" */;
+			buildConfigurationList = 1DCCF2E125D999F800FA2946 /* Build configuration list for PBXNativeTarget "image-resizer" */;
 			buildPhases = (
 				1DCCF2DD25D999F800FA2946 /* Sources */,
 				1DCCF2DF25D999F800FA2946 /* Frameworks */,
@@ -130,9 +130,9 @@
 			);
 			dependencies = (
 			);
-			name = "image-resizer_arm64";
+			name = "image-resizer";
 			productName = "image-resizer";
-			productReference = 1DCCF2E425D999F800FA2946 /* image-resizer_arm64 */;
+			productReference = 1DCCF2E425D999F800FA2946 /* image-resizer */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -148,7 +148,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1DB9AC5425CDA10300AC574A /* Build configuration list for PBXProject "image-resizer_arm64" */;
+			buildConfigurationList = 1DB9AC5425CDA10300AC574A /* Build configuration list for PBXProject "image-resizer" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -162,7 +162,7 @@
 			projectRoot = "";
 			targets = (
 				1DB9AC5825CDA10300AC574A /* image-resizer_x86 */,
-				1DCCF2DC25D999F800FA2946 /* image-resizer_arm64 */,
+				1DCCF2DC25D999F800FA2946 /* image-resizer */,
 			);
 		};
 /* End PBXProject section */
@@ -351,7 +351,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DB9AC5425CDA10300AC574A /* Build configuration list for PBXProject "image-resizer_arm64" */ = {
+		1DB9AC5425CDA10300AC574A /* Build configuration list for PBXProject "image-resizer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DB9AC5E25CDA10300AC574A /* Debug */,
@@ -369,7 +369,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1DCCF2E125D999F800FA2946 /* Build configuration list for PBXNativeTarget "image-resizer_arm64" */ = {
+		1DCCF2E125D999F800FA2946 /* Build configuration list for PBXNativeTarget "image-resizer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DCCF2E225D999F800FA2946 /* Debug */,

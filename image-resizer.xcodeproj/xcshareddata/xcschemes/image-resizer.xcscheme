@@ -17,7 +17,7 @@
                BlueprintIdentifier = "1DB9AC5825CDA10300AC574A"
                BuildableName = "image-resizer_x86"
                BlueprintName = "image-resizer_x86"
-               ReferencedContainer = "container:image-resizer_arm64.xcodeproj">
+               ReferencedContainer = "container:image-resizer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,9 +47,15 @@
             BlueprintIdentifier = "1DB9AC5825CDA10300AC574A"
             BuildableName = "image-resizer_x86"
             BlueprintName = "image-resizer_x86"
-            ReferencedContainer = "container:image-resizer_arm64.xcodeproj">
+            ReferencedContainer = "container:image-resizer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "/Users/marcojanker/development/GitHub/image-resizer/3277027_440/IMG_0741.JPG"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -64,7 +70,7 @@
             BlueprintIdentifier = "1DB9AC5825CDA10300AC574A"
             BuildableName = "image-resizer_x86"
             BlueprintName = "image-resizer_x86"
-            ReferencedContainer = "container:image-resizer_arm64.xcodeproj">
+            ReferencedContainer = "container:image-resizer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
