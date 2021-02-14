@@ -237,13 +237,13 @@ CImg<unsigned char> getTextbox (const char * text, int initialSize, float covere
 	}
 	
 	// Create textbox
-	//textbox.draw_text(0,0,text,white,black,1,size);
 	// create background image with size of textbox
 	textboxbg.assign(textbox.width() ,textbox.height() ,1,3,0);
 	// fill it black
 	textboxbg.fill(backgroundColor);
 	// draw text on background
 	textboxbg.draw_text(0,0,text,green,black,1,size);
+	
     return textboxbg;
 }
 
