@@ -60,10 +60,10 @@ std::vector<fs::path> getAllPictures(std::vector<fs::path> files)
 	return pictures;
 }
 
-vector<string> readLinesFromFile(string file)
+std::vector<string> readLinesFromFile(string file)
 {
     string filename(file);
-    vector<string> lines;
+    std::vector<string> lines;
     string line;
 
     ifstream input_file(filename, std::ifstream::in);
