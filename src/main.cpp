@@ -51,7 +51,7 @@ std::vector<fs::path> getAllPictures(std::vector<fs::path> files)
 
 	for (auto file : files)
 	{
-		if (isValidImage(file))
+		if (isValidImage(file.string()))
 		{
 			pictures.push_back(file);
 		}
@@ -259,7 +259,7 @@ void resizeAndStore(fs::path file) {
 	fs::path resizedFilePath = file.parent_path() / (fs::path(file.stem().string() + resizedAppendix ).string() + file.extension().string());
 
 	try {
-		originalImage.load(file.c_str());
+		originalImage.load( (char*) file.c_str() );
 	} catch (CImgException) {
 		std::cout << "Image " << file.filename() << " not recognized" << std::endl;
 		originalImage.assign();
@@ -282,7 +282,7 @@ void resizeAndStore(fs::path file) {
 
 		// save modified image
 		try {
-			resizedImage.save( resizedFilePath.c_str() );
+			resizedImage.save( (char*) resizedFilePath.c_str() );
 		} catch (const char* msg) {
 			cerr << msg << endl;
 		}
