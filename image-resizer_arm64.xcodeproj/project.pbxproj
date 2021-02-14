@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1DB9AC6B25CDA12B00AC574A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DB9AC6A25CDA12B00AC574A /* main.cpp */; };
+		1DCCF2DE25D999F800FA2946 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DB9AC6A25CDA12B00AC574A /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -20,23 +21,40 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		1DCCF2E025D999F800FA2946 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1DB9AC5925CDA10300AC574A /* image-resizer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "image-resizer"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1DB9AC6525CDA12100AC574A /* conanbuildinfo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = conanbuildinfo.xcconfig; path = ../conanbuildinfo.xcconfig; sourceTree = "<group>"; };
+		1DB9AC5925CDA10300AC574A /* image-resizer_x86 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "image-resizer_x86"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DB9AC6525CDA12100AC574A /* conanbuildinfo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = conanbuildinfo.xcconfig; sourceTree = "<group>"; };
 		1DB9AC6725CDA12B00AC574A /* ProgressBar.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ProgressBar.hpp; sourceTree = "<group>"; };
 		1DB9AC6825CDA12B00AC574A /* CImg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CImg.h; sourceTree = "<group>"; };
 		1DB9AC6925CDA12B00AC574A /* resizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = resizer.hpp; sourceTree = "<group>"; };
 		1DB9AC6A25CDA12B00AC574A /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		1DB9AC7125CDA29F00AC574A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		1DB9AC7225CDA29F00AC574A /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = ../CMakeLists.txt; sourceTree = "<group>"; };
-		1DB9AC7325CDA29F00AC574A /* conanfile.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = conanfile.py; path = ../conanfile.py; sourceTree = "<group>"; };
-		1DB9AC7425CDA29F00AC574A /* conanfile.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = conanfile.txt; path = ../conanfile.txt; sourceTree = "<group>"; };
+		1DB9AC7125CDA29F00AC574A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		1DB9AC7225CDA29F00AC574A /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		1DB9AC7325CDA29F00AC574A /* conanfile.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = conanfile.py; sourceTree = "<group>"; };
+		1DB9AC7425CDA29F00AC574A /* conanfile.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = conanfile.txt; sourceTree = "<group>"; };
+		1DCCF2E425D999F800FA2946 /* image-resizer_arm64 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "image-resizer_arm64"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		1DB9AC5625CDA10300AC574A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1DCCF2DF25D999F800FA2946 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -63,7 +81,8 @@
 		1DB9AC5A25CDA10300AC574A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1DB9AC5925CDA10300AC574A /* image-resizer */,
+				1DB9AC5925CDA10300AC574A /* image-resizer_x86 */,
+				1DCCF2E425D999F800FA2946 /* image-resizer_arm64 */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -76,16 +95,15 @@
 				1DB9AC6925CDA12B00AC574A /* resizer.hpp */,
 				1DB9AC6A25CDA12B00AC574A /* main.cpp */,
 			);
-			name = src;
-			path = ../src;
+			path = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1DB9AC5825CDA10300AC574A /* image-resizer */ = {
+		1DB9AC5825CDA10300AC574A /* image-resizer_x86 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1DB9AC6025CDA10300AC574A /* Build configuration list for PBXNativeTarget "image-resizer" */;
+			buildConfigurationList = 1DB9AC6025CDA10300AC574A /* Build configuration list for PBXNativeTarget "image-resizer_x86" */;
 			buildPhases = (
 				1DB9AC5525CDA10300AC574A /* Sources */,
 				1DB9AC5625CDA10300AC574A /* Frameworks */,
@@ -95,9 +113,26 @@
 			);
 			dependencies = (
 			);
-			name = "image-resizer";
+			name = "image-resizer_x86";
 			productName = "image-resizer";
-			productReference = 1DB9AC5925CDA10300AC574A /* image-resizer */;
+			productReference = 1DB9AC5925CDA10300AC574A /* image-resizer_x86 */;
+			productType = "com.apple.product-type.tool";
+		};
+		1DCCF2DC25D999F800FA2946 /* image-resizer_arm64 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DCCF2E125D999F800FA2946 /* Build configuration list for PBXNativeTarget "image-resizer_arm64" */;
+			buildPhases = (
+				1DCCF2DD25D999F800FA2946 /* Sources */,
+				1DCCF2DF25D999F800FA2946 /* Frameworks */,
+				1DCCF2E025D999F800FA2946 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "image-resizer_arm64";
+			productName = "image-resizer";
+			productReference = 1DCCF2E425D999F800FA2946 /* image-resizer_arm64 */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -113,7 +148,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1DB9AC5425CDA10300AC574A /* Build configuration list for PBXProject "image-resizer" */;
+			buildConfigurationList = 1DB9AC5425CDA10300AC574A /* Build configuration list for PBXProject "image-resizer_arm64" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -126,7 +161,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1DB9AC5825CDA10300AC574A /* image-resizer */,
+				1DB9AC5825CDA10300AC574A /* image-resizer_x86 */,
+				1DCCF2DC25D999F800FA2946 /* image-resizer_arm64 */,
 			);
 		};
 /* End PBXProject section */
@@ -137,6 +173,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DB9AC6B25CDA12B00AC574A /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1DCCF2DD25D999F800FA2946 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1DCCF2DE25D999F800FA2946 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,10 +324,34 @@
 			};
 			name = Release;
 		};
+		1DCCF2E225D999F800FA2946 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8J58VWJG83;
+				ENABLE_HARDENED_RUNTIME = YES;
+				EXCLUDED_ARCHS = x86_64;
+				INSTALL_PATH = .;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		1DCCF2E325D999F800FA2946 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8J58VWJG83;
+				ENABLE_HARDENED_RUNTIME = YES;
+				EXCLUDED_ARCHS = x86_64;
+				INSTALL_PATH = .;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DB9AC5425CDA10300AC574A /* Build configuration list for PBXProject "image-resizer" */ = {
+		1DB9AC5425CDA10300AC574A /* Build configuration list for PBXProject "image-resizer_arm64" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DB9AC5E25CDA10300AC574A /* Debug */,
@@ -292,11 +360,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1DB9AC6025CDA10300AC574A /* Build configuration list for PBXNativeTarget "image-resizer" */ = {
+		1DB9AC6025CDA10300AC574A /* Build configuration list for PBXNativeTarget "image-resizer_x86" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DB9AC6125CDA10300AC574A /* Debug */,
 				1DB9AC6225CDA10300AC574A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DCCF2E125D999F800FA2946 /* Build configuration list for PBXNativeTarget "image-resizer_arm64" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DCCF2E225D999F800FA2946 /* Debug */,
+				1DCCF2E325D999F800FA2946 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

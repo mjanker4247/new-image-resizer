@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1DBBABB225D1CAA200513F04"
-               BuildableName = "resize-image"
-               BlueprintName = "resize-image"
-               ReferencedContainer = "container:resize-image.xcodeproj">
+               BlueprintIdentifier = "1DB9AC5825CDA10300AC574A"
+               BuildableName = "image-resizer_x86"
+               BlueprintName = "image-resizer_x86"
+               ReferencedContainer = "container:image-resizer_arm64.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,18 +44,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1DBBABB225D1CAA200513F04"
-            BuildableName = "resize-image"
-            BlueprintName = "resize-image"
-            ReferencedContainer = "container:resize-image.xcodeproj">
+            BlueprintIdentifier = "1DB9AC5825CDA10300AC574A"
+            BuildableName = "image-resizer_x86"
+            BlueprintName = "image-resizer_x86"
+            ReferencedContainer = "container:image-resizer_arm64.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "/Users/marcojanker/Documents/code/image-resizer/resize_images/3277027_440/"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -67,10 +61,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1DBBABB225D1CAA200513F04"
-            BuildableName = "resize-image"
-            BlueprintName = "resize-image"
-            ReferencedContainer = "container:resize-image.xcodeproj">
+            BlueprintIdentifier = "1DB9AC5825CDA10300AC574A"
+            BuildableName = "image-resizer_x86"
+            BlueprintName = "image-resizer_x86"
+            ReferencedContainer = "container:image-resizer_arm64.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
