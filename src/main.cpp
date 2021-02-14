@@ -253,54 +253,48 @@ void resizeAndStore(fs::path file) {
 	CImg<unsigned char> resizedImage;
 	
 	// Create path objects
-	// path to original file
-	std::filesystem::path originalFilePath(file);
 	// This folder should be already created before
-	std::filesystem::path destFilePath = originalFilePath.parent_path() / destDir / originalFilePath.filename();
+	fs::path destFilePath = file.parent_path() / destDir / file.filename();
 	// path object to resized image file
-	std::filesystem::path resizedFilePath = originalFilePath.parent_path() / (std::filesystem::path(originalFilePath.stem().string() + resizedAppendix ).string() + originalFilePath.extension().string());
+	fs::path resizedFilePath = file.parent_path() / (fs::path(file.stem().string() + resizedAppendix ).string() + file.extension().string());
 
 	try {
 		originalImage.load(file.c_str());
-
-		if (originalImage) {
-
-			/*
-			 * Resize original image
-			 * Use async function
-			 */
-			resizeKeepAspectRatio(originalImage,newimage_width,newimage_height);
-
-			try {
-				// draw text box in left top corner
-				resizedImage.draw_image(posX,posY,textbox);
-			} catch (const char* msg) {
-				cerr << msg << endl;
-			}
-
-			// save modified image
-			try {
-				resizedImage.save_jpeg( resizedFilePath.generic_string().c_str(), 90);
-			} catch (const char* msg) {
-				cerr << msg << endl;
-			}
-
-			// move original image to destination folder
-			try {
-				std::filesystem::rename(originalFilePath,destFilePath);
-			}
-			catch (const std::filesystem::filesystem_error& ex)
-			{
-				std::fprintf(stderr,"Filesystem Error: %s",ex.what());
-				exit(EXIT_FAILURE);
-			}
-			
-		}
 	} catch (CImgException) {
-		std::cout << "Image " << originalFilePath << " not recognized" << std::endl;
+		std::cout << "Image " << file.filename() << " not recognized" << std::endl;
 		originalImage.assign();
 		exit(EXIT_FAILURE);
 	}
+
+	if (originalImage) {
+		try {
+			resizedImage = resizeKeepAspectRatio(originalImage,newimage_width,newimage_height);
+		} catch (const char* msg) {
+			cerr << msg << endl;
+		}
+
+		try {
+			// draw text box in left top corner
+			resizedImage.draw_image(posX,posY,textbox);
+		} catch (const char* msg) {
+			cerr << msg << endl;
+		}
+
+		// save modified image
+		try {
+			resizedImage.save( resizedFilePath.c_str() );
+		} catch (const char* msg) {
+			cerr << msg << endl;
+		}
+
+		// move original image to destination folder
+		try {
+			fs::rename(file,destFilePath);
+		} catch (const fs::filesystem_error& ex) {
+			std::fprintf(stderr,"Filesystem Error: %s",ex.what());
+			exit(EXIT_FAILURE);
+		}
+	}	
 }
 
 void printVersion() {
@@ -380,12 +374,17 @@ int main(int argc, char * argv[]) {
 
 	for (auto const& file: files )
 	{
-		futures.push_back (std::async(resizeAndStore, file) );
+		futures.emplace_back(std::async(resizeAndStore, file) );
+	}
+	
+	for (auto& f : futures)
+	{
+		f.get();
 	}
 	
 	auto end = std::chrono::steady_clock::now();
 	auto diff = end - start;
-	std::cout << std::chrono::duration <double, std::milli> (diff).count() << " ms" << std::endl;
+	std::cout << "Converted " << files.size() << " images in " << std::chrono::duration <double, std::milli> (diff).count() << " ms" << std::endl;
 	
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	
