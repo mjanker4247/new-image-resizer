@@ -9,6 +9,8 @@ class resize_images(ConanFile):
 	generators = "cmake", "xcode"
 	no_copy_source = True
 	build_policy = "missing"
+	options = {"shared": [True, False], "st": [True, False]}
+	default_options = {"shared": False, "st": False}
             
 	def requirements(self):
 		# installed by boost library 
