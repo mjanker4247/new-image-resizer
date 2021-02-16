@@ -372,15 +372,29 @@ int main(int argc, char * argv[]) {
 	auto start = std::chrono::steady_clock::now();
 	std::vector<std::future<void>> futures;
 
-	for (auto const& file: files )
-	{
-		futures.emplace_back(std::async(resizeAndStore, file) );
+	// Reserve 16K of memory that can be deleted just in case we run out of memory
+	char* _emergencyMemory = new char[16384];
+
+	try {
+		for (auto const& file: files )
+		{
+			futures.emplace_back(std::async(resizeAndStore, file) );
+		}
+		
+		for (auto& f : futures)
+		{
+			f.get();
+		}
+	} catch(bad_alloc& ex) {
+		// Delete the reserved memory so we can print an error message before exiting
+		delete[] _emergencyMemory;
+	 
+		cerr << sizeof(int) << " bytes: Out of memory!";
+		cin.get();
+		exit(EXIT_FAILURE);
 	}
 	
-	for (auto& f : futures)
-	{
-		f.get();
-	}
+	
 	
 	auto end = std::chrono::steady_clock::now();
 	auto diff = end - start;
