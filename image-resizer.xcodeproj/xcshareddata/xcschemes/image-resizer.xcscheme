@@ -5,22 +5,6 @@
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
-      <BuildActionEntries>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1DB9AC5825CDA10300AC574A"
-               BuildableName = "image-resizer_x86"
-               BlueprintName = "image-resizer_x86"
-               ReferencedContainer = "container:image-resizer.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-      </BuildActionEntries>
    </BuildAction>
    <TestAction
       buildConfiguration = "Debug"
@@ -44,9 +28,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1DB9AC5825CDA10300AC574A"
-            BuildableName = "image-resizer_x86"
-            BlueprintName = "image-resizer_x86"
+            BlueprintIdentifier = "1DCCF2DC25D999F800FA2946"
+            BuildableName = "image-resizer"
+            BlueprintName = "image-resizer"
             ReferencedContainer = "container:image-resizer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -63,16 +47,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "1DB9AC5825CDA10300AC574A"
-            BuildableName = "image-resizer_x86"
-            BlueprintName = "image-resizer_x86"
-            ReferencedContainer = "container:image-resizer.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
