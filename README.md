@@ -19,20 +19,26 @@ conan profile new default --force --detect  # Generates default profile detectin
 conan profile update settings.compiler.libcxx=libstdc++11 default  # Sets libcxx to C++11 ABI
 ````
 
+### Out of source build instructions
+
 Change to project folder and build
 
 ```
-cd <path/to/source>
-mkdir build
-cd build
-conan install .. --build=missing
-conan build ..
+cd <path/to/workfolder>
+conan install ./new-image-resizer -if build-win --build=missing
+conan build ./new-image-resizer -bf build-win
 ````
+
 ## For Mac
+
+### Out of source build instructions
+
 ```
-cd <path/to/source>
-conan install . --build=missing
+cd <path/to/workfolder>
+conan install ./new-image-resizer -if build-mac --build=missing
+conan build ./new-image-resizer -bf build-mac
 ````
+
 This command will generate a file 'conanbuildinfo.xcconfig' in the current folder.
 Within Xcode create a new project for a CLI-Tool.
 Remove demo code.
