@@ -1,13 +1,12 @@
 #define VERSION 4
 
-//Debug
+// Debug
 #define USEDEBUG 0
 #ifdef USEDEBUG
 #define Debug(x) std::cout << x << std::endl
 #else
 #define Debug(x)
 #endif
-
 
 #ifdef _WIN32
 #include <windows.h>
@@ -30,7 +29,7 @@ using namespace cimg_library;
 #include <thread>
 #include <future>
 #include <chrono>
-#include <algorithm> 
+#include <algorithm>
 #include <regex>
 #include <iostream>
 #include <fstream>
@@ -42,21 +41,21 @@ namespace fs = std::filesystem;
 
 using namespace std;
 
-
 // Declare colors
-const unsigned char
-	white[]  = { 255, 255, 255 },
-	black[] = { 0, 0, 0 },
-	red[] = { 255, 0, 0 },
-	yellow[] = { 200, 155, 0 },
-	green[] = { 0, 255, 0 },
-	purple[] = { 175, 32, 186 },
-	blue[] = { 0, 0, 255 },
-	grey[] = { 127, 127, 127 };
+const unsigned char white[] = {255, 255, 255}, black[] = {0, 0, 0},
+                    red[] = {255, 0, 0}, yellow[] = {200, 155, 0},
+                    green[] = {0, 255, 0}, purple[] = {175, 32, 186},
+                    blue[] = {0, 0, 255}, grey[] = {127, 127, 127};
 
 enum IMAGE_TYPE {
-	GIF = 0, PNG, BMP, JPG, JPEG, TIFF, TGA,
-	LAST // used for looping
+  GIF = 0,
+  PNG,
+  BMP,
+  JPG,
+  JPEG,
+  TIFF,
+  TGA,
+  LAST // used for looping
 };
 
 // Declare variables
@@ -75,7 +74,7 @@ char resizedAppendix[] = "_resized";
 char destDir[] = "Originale";
 string orderNumberFile = "overlay.txt";
 
-const char * orderNumber;
+const char *orderNumber;
 int textboxWidth;
 int textboxHeight;
 int textboxSize;
@@ -85,18 +84,19 @@ string strOrderNumber;
 int width;
 std::vector<fs::path> files;
 
-
 bool useOverlay = false;
 CImg<unsigned char> textbackground;
 CImg<unsigned char> textbox;
 
-bool isValidImage (const string file);
-string readOrderNumberFromFile(const string& file);
+bool isValidImage(const string file);
+string readOrderNumberFromFile(const string &file);
 string readOrderNumberFromFile(std::filesystem::path filePath);
-int high_low(int high,int low);
-CImg<unsigned char> getTextbox (const char * text, int initialSize, float coveredSize, float toBeCovered, float tolerance);
+int high_low(int high, int low);
+CImg<unsigned char> getTextbox(const char *text, int initialSize,
+                               float coveredSize, float toBeCovered,
+                               float tolerance);
 void printVersion();
-std::vector<fs::path> getFilesFromDirectory(char* path);
+std::vector<fs::path> getFilesFromDirectory(char *path);
 std::vector<fs::path> getAllPictures(std::vector<char *>);
 std::vector<fs::path> getAllPictures(std::vector<fs::path>);
 vector<string> readLinesFromFile(string file);
