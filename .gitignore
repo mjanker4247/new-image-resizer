@@ -520,3 +520,4 @@ MigrationBackup/
 
 # End of https://www.toptal.com/developers/gitignore/api/xcode,conan,visualstudio,visualstudiocode,cmake
 
+image-resizer.xcodeproj/project.xcworkspace/xcuserdata/marcojanker.xcuserdatad/UserInterfaceState.xcuserstate
